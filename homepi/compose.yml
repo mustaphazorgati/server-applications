@@ -1,0 +1,153 @@
+################################################################################
+# GLOBAL                                                                       #
+################################################################################
+
+x-global-service: &global--service
+  stop_grace_period: 10s
+  restart: unless-stopped
+  environment: &global-env
+    TZ: &global-env--timezone ${TZ:?container timezone needs to be set}
+
+################################################################################
+# UNIFI                                                                        #
+################################################################################
+
+x-unifi-hosts: &unifi--hosts
+  UNIFI_CONTROLLER_HOST: &unifi--controller-host "unifi-controller"
+
+x-unifi-networks: &unifi--networks
+  &unifi--network unifi:
+    name: *unifi--network
+
+x-unifi-volumes: &unifi--volumes
+  &unifi--controller-data-volume unifi_controller_data:
+    name: *unifi--controller-data-volume
+    external: true
+
+x-unifi-service: &unifi--service
+  << : *global--service
+  environment:
+    << : *global-env
+    UNIFI_CONTROLLER_DOMAIN: &unifi--controller-domain unifi.controller.intern.zorgati.cloud
+  networks:
+    - *unifi--network
+
+x-unifi-services: &unifi--services
+  *unifi--controller-host:
+    << : *unifi--service
+    image: jacobalberty/unifi
+    container_name: *unifi--controller-host
+    volumes:
+      - type: volume
+        source: *unifi--controller-data-volume
+        target: /unifi
+      - type: bind
+        source: ./unifi/backups
+        target: /unifi/data/backup
+      - type: bind
+        source: ./unifi/scripts
+        target: /run
+    environment:
+      << : *global-env
+      UNIFI_STDOUT: true
+    ports:
+      - 3478:3478/udp # STUN
+      - 10001:10001/udp # AP discovery
+
+###############################################################################
+# DNS                                                                         #
+###############################################################################
+
+x-dns-hosts: &dns--hosts
+  COREDNS_HOST: &dns--coredns-host coredns
+
+x-dns-networks: &dns--networks
+  &dns--coredns-network coredns_network:
+    name: *dns--coredns-network
+
+x-dns-service: &dns--service
+  << : *global--service
+  networks:
+     - *dns--coredns-network
+
+x-dns-services: &dns--services
+  *dns--coredns-host:
+    << : *dns--service
+    image: coredns/coredns
+    container_name: *dns--coredns-host
+    ports:
+      - 53:53
+      - 53:53/udp
+    volumes:
+      - ./coredns:/etc/coredns
+    command: -conf /etc/coredns/Corefile
+
+###############################################################################
+# REVERSE PROXY                                                               #
+###############################################################################
+
+x-reverse-proxy-hosts: &reverse-proxy--hosts
+  CADDY_HOST: &reverse-proxy--caddy-host caddy
+
+x-reverse-proxy-volumes: &reverse-proxy--volumes
+  &reverse-proxy--caddy-data-volume caddy_data:
+    name: *reverse-proxy--caddy-data-volume
+    external: true
+  &reverse-proxy--caddy-config-volume caddy_config:
+    name: *reverse-proxy--caddy-config-volume
+    external: true
+
+x-reverse-proxy-networks: &reverse-proxy--networks
+  &reverse-proxy--caddy-network caddy:
+    name: *reverse-proxy--caddy-network
+
+x-reverse-proxy-services: &reverse-proxy--services
+  *reverse-proxy--caddy-host:
+    << : *global--service
+    image: slothcroissant/caddy-cloudflaredns
+    container_name: *reverse-proxy--caddy-host
+    volumes:
+      - type: bind
+        source: ./caddy
+        target: /etc/caddy
+      - type: volume
+        source: *reverse-proxy--caddy-data-volume
+        target: /data
+      - type: volume
+        source: *reverse-proxy--caddy-config-volume
+        target: /config
+    environment:
+      << :
+        - *global-env
+        - *unifi--hosts
+      CLOUDFLARE_API_TOKEN: ${CLOUDFLARE_API_TOKEN:? can't use DNS challenge without API key}
+      UNIFI_CONTROLLER_DOMAIN: *unifi--controller-domain
+    ports:
+      - 80:80
+      - 443:443
+      - 443:443/udp
+      - 8080:8080
+    networks:
+      - *reverse-proxy--caddy-network
+      - *unifi--network
+
+###############################################################################
+# COMPOSE DEFINITIONS                                                         #
+###############################################################################
+
+services:
+  << :
+    - *reverse-proxy--services
+    - *unifi--services
+    - *dns--services
+
+volumes:
+  << :
+    - *reverse-proxy--volumes
+    - *unifi--volumes
+
+networks:
+  << :
+    - *reverse-proxy--networks
+    - *unifi--networks
+    - *dns--networks

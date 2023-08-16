@@ -1,0 +1,36 @@
+https://{$NGINX_HELLO_DOMAIN} {
+	encode gzip
+	import /etc/caddy/caddy_security.conf
+	tls {
+		dns cloudflare {$CLOUDFLARE_API_TOKEN}
+		resolvers 1.1.1.1
+	}
+	reverse_proxy {$NGINX_HELLO_HOST}:{$NGINX_HELLO_PORT}
+}
+
+https://{$UNIFI_CONTROLLER_DOMAIN} {
+	encode gzip
+	import /etc/caddy/caddy_security.conf
+	tls {
+		dns cloudflare {$CLOUDFLARE_API_TOKEN}
+		resolvers 1.1.1.1
+	}
+	reverse_proxy https://{$UNIFI_CONTROLLER_HOST}:8443 {
+		header_up -Authorization
+		transport http {
+			tls_insecure_skip_verify
+		}
+	}
+}
+
+{$UNIFI_CONTROLLER_DOMAIN}:8080 {
+	encode gzip
+	import /etc/caddy/caddy_security.conf
+	tls {
+		dns cloudflare {$CLOUDFLARE_API_TOKEN}
+		resolvers 1.1.1.1
+	}
+	reverse_proxy http://{$UNIFI_CONTROLLER_HOST}:8080 {
+		header_up -Authorization
+	}
+}
