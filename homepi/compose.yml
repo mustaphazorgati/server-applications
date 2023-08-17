@@ -65,7 +65,12 @@ x-unifi-services: &unifi--services
 ###############################################################################
 
 x-dns-hosts: &dns--hosts
-  COREDNS_HOST: &dns--coredns-host coredns
+  DNS_COREDNS_HOST: &dns--coredns-host coredns
+  DNS_CLOUDLFARE_DDNS_HOST: &dns--cloudflare-ddns-host cloudflare-ddns
+
+x-dns-networks: &dns--networks
+  &dns--cloudflare-ddns-network cloudflare-ddns:
+    name: *dns--cloudflare-ddns-network
 
 x-dns-services: &dns--services
   *dns--coredns-host:
@@ -76,6 +81,22 @@ x-dns-services: &dns--services
     volumes:
       - ./coredns:/etc/coredns
     command: -conf /etc/coredns/Corefile
+  *dns--cloudflare-ddns-host:
+    << : *global--service
+    image: timothyjmiller/cloudflare-ddns
+    container_name: *dns--cloudflare-ddns-host
+    security_opt:
+      - no-new-privileges:true
+    environment:
+      << : *global-env
+      PUID: 1000
+      PGID: 1000
+    volumes:
+      - type: bind
+        source: ./cloudflare-ddns/config.json
+        target: /config.json
+    networks:
+      - *dns--cloudflare-ddns-network
 
 ###############################################################################
 # REVERSE PROXY                                                               #
@@ -145,3 +166,4 @@ networks:
   << :
     - *reverse-proxy--networks
     - *unifi--networks
+    - *dns--networks
