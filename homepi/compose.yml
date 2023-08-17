@@ -23,6 +23,9 @@ x-unifi-volumes: &unifi--volumes
   &unifi--controller-data-volume unifi_controller_data:
     name: *unifi--controller-data-volume
     external: true
+  &unifi--controller-run-volume unifi_controller_run:
+    name: *unifi--controller-run-volume
+    external: true
 
 x-unifi-service: &unifi--service
   << : *global--service
@@ -41,6 +44,9 @@ x-unifi-services: &unifi--services
       - type: volume
         source: *unifi--controller-data-volume
         target: /unifi
+      - type: volume
+        source: *unifi--controller-run-volume
+        target: /unifi/run
       - type: bind
         source: ./unifi/backups
         target: /unifi/data/backup
