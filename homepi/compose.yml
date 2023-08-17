@@ -7,6 +7,7 @@ x-global-service: &global--service
   restart: unless-stopped
   environment: &global-env
     TZ: &global-env--timezone ${TZ:?container timezone needs to be set}
+    HOST_IP: ${HOST_IP:?required}
 
 ################################################################################
 # UNIFI                                                                        #
@@ -31,7 +32,7 @@ x-unifi-service: &unifi--service
   << : *global--service
   environment:
     << : *global-env
-    UNIFI_CONTROLLER_DOMAIN: &unifi--controller-domain unifi.controller.intern.zorgati.cloud
+    UNIFI_CONTROLLER_DOMAIN: &unifi--controller-domain ${UNIFI_CONTROLLER_DOMAIN:?required}
   networks:
     - *unifi--network
 
@@ -81,6 +82,9 @@ x-dns-services: &dns--services
     volumes:
       - ./coredns:/etc/coredns
     command: -conf /etc/coredns/Corefile
+    environment:
+      << : *global-env
+      UNIFI_CONTROLLER_DOMAIN: *unifi--controller-domain
   *dns--cloudflare-ddns-host:
     << : *global--service
     image: timothyjmiller/cloudflare-ddns
