@@ -1,20 +1,34 @@
-https://{$NGINX_HELLO_DOMAIN} {
-	encode gzip
-	import /etc/caddy/caddy_security.conf
-	tls {
-		dns cloudflare {$CLOUDFLARE_API_TOKEN}
-		resolvers 1.1.1.1
+###############################################################################
+# GLOBAL                                                                      #
+###############################################################################
+{
+	servers {
+		listener_wrappers {
+			http_redirect
+			tls
+		}
 	}
-	reverse_proxy {$NGINX_HELLO_HOST}:{$NGINX_HELLO_PORT}
 }
 
-https://{$UNIFI_CONTROLLER_DOMAIN} {
+###############################################################################
+# SNIPPETS                                                                    #
+###############################################################################
+
+(default) {
 	encode gzip
 	import /etc/caddy/caddy_security.conf
 	tls {
 		dns cloudflare {$CLOUDFLARE_API_TOKEN}
 		resolvers 1.1.1.1
 	}
+}
+
+###############################################################################
+# UNIFI CONTROLLER                                                            #
+###############################################################################
+
+https://{$UNIFI_CONTROLLER_DOMAIN} {
+	import default
 	reverse_proxy https://{$UNIFI_CONTROLLER_HOST}:8443 {
 		header_up -Authorization
 		transport http {
@@ -24,12 +38,7 @@ https://{$UNIFI_CONTROLLER_DOMAIN} {
 }
 
 {$UNIFI_CONTROLLER_DOMAIN}:8080 {
-	encode gzip
-	import /etc/caddy/caddy_security.conf
-	tls {
-		dns cloudflare {$CLOUDFLARE_API_TOKEN}
-		resolvers 1.1.1.1
-	}
+	import default
 	reverse_proxy http://{$UNIFI_CONTROLLER_HOST}:8080 {
 		header_up -Authorization
 	}

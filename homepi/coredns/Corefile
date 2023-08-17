@@ -2,7 +2,7 @@
   reload 10s
   erratic
   hosts {
-    192.168.1.3 unifi.controller.intern.zorgati.cloud unifi.controller
+    192.168.1.3 unifi.controller.intern.zorgati.cloud 
 
     fallthrough
   }
