@@ -61,23 +61,12 @@ x-unifi-services: &unifi--services
 x-dns-hosts: &dns--hosts
   COREDNS_HOST: &dns--coredns-host coredns
 
-x-dns-networks: &dns--networks
-  &dns--coredns-network coredns_network:
-    name: *dns--coredns-network
-
-x-dns-service: &dns--service
-  << : *global--service
-  networks:
-     - *dns--coredns-network
-
 x-dns-services: &dns--services
   *dns--coredns-host:
-    << : *dns--service
+    << : *global--service
     image: coredns/coredns
     container_name: *dns--coredns-host
-    ports:
-      - 53:53
-      - 53:53/udp
+    network_mode: host
     volumes:
       - ./coredns:/etc/coredns
     command: -conf /etc/coredns/Corefile
@@ -150,4 +139,3 @@ networks:
   << :
     - *reverse-proxy--networks
     - *unifi--networks
-    - *dns--networks
