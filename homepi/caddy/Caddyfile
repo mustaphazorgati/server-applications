@@ -5,9 +5,36 @@
 (default) {
 	encode gzip
 	import /etc/caddy/caddy_security.conf
-	tls {
+	tls {$TLS_EMAIL} {
 		dns cloudflare {$CLOUDFLARE_API_TOKEN}
 		resolvers 1.1.1.1
+	}
+}
+###############################################################################
+# VAULTWARDEN                                                                 #
+###############################################################################
+
+https://{$VAULTWARDEN_SERVER_DOMAIN} {
+	import default
+
+	log {
+		level INFO
+		output file /var/log/{$VAULTWARDEN_SERVER_DOMAIN}.log {
+			roll_size 10MB
+			roll_keep 10
+		}
+	}
+
+	# Harden Admin Page
+	basicauth /admin* {
+		admin JDJhJDE0JEh6WlRaWjlGbXRKWUU4MmpLTDBSZnVZSnVrVDVVRk02NTYzNVRoZElxR0FoaHdmYVpPSDNh
+	}
+
+	# Proxy the Root directory to Rocket
+	reverse_proxy {$VAULTWARDEN_SERVER_HOST}:80 {
+		# Send the true remote IP to Rocket, so that bitwarden_rs can put this in the
+		# log, so that fail2ban can ban the correct IP.
+		header_up X-Real-IP {remote_host}
 	}
 }
 
