@@ -5,6 +5,11 @@
 x-global-service: &global--service
   stop_grace_period: 10s
   restart: unless-stopped
+  healthcheck: &global--healthcheck
+    interval: 5s
+    timeout: 3s
+    retries: 3
+    start_period: 30s
   environment: &global-env
     TZ: &global-env--timezone ${TZ:?}
     HOST_IP: ${HOST_IP:?}
@@ -103,6 +108,9 @@ x-vaultwarden--services: &vaultwarden--services
       - type: volume
         source: *vaultwarden--postgres-data
         target: /var/lib/postgresql/data
+    healthcheck:
+      << : *global--healthcheck
+      test: [ "CMD-SHELL", "pg_isready" ]
     environment:
       << : *vaultwarden-env
       POSTGRES_PASSWORD: ${VAULTWARDEN_POSTGRES_PASSWORD:?}
@@ -112,6 +120,9 @@ x-vaultwarden--services: &vaultwarden--services
   *vaultwarden--server-host:
     << : *vaultwarden--service
     container_name: *vaultwarden--server-host
+    depends_on:
+      *vaultwarden--postgres-host:
+        condition: service_healthy
     image: vaultwarden/server
     volumes:
       - type: volume
@@ -207,6 +218,9 @@ x-reverse-proxy-services: &reverse-proxy--services
     << : *global--service
     image: slothcroissant/caddy-cloudflaredns
     container_name: *reverse-proxy--caddy-host
+    healthcheck:
+      << : *global--healthcheck
+      test: [ "CMD-SHELL", "wget --tries=1 --spider http://localhost:2019/reverse_proxy/upstreams" ]
     volumes:
       - type: bind
         source: ./caddy
