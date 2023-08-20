@@ -11,5 +11,7 @@
   forward . tls://9.9.9.9 tls://149.112.112.112 {
     tls_servername dns.quad9.net
   }
-  cache
+  cache {
+    prefetch 1024 1m 20%
+  }
 }
