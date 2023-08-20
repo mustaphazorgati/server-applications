@@ -8,7 +8,7 @@
     no_reverse
     fallthrough
   }
-  forward . tls://9.9.9.9 tls://149.112.112.112 tls://2620:fe::fe tls://2620:fe::fe:9 {
+  forward . tls://9.9.9.9 tls://149.112.112.112 {
     tls_servername dns.quad9.net
   }
   cache
