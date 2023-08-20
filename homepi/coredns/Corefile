@@ -1,17 +1,15 @@
 . {
-  health :8081 {
-    lameduck 2s
-  }
   reload 10s
-  erratic
   hosts {
     {$HOST_IP} {$UNIFI_CONTROLLER_DOMAIN} vault.zorgati.cloud
     192.168.1.2 pi.hole
+    192.168.1.1 fritz.box
 
     no_reverse
     fallthrough
   }
-  forward . 192.168.1.1
+  forward . tls://9.9.9.9 tls://149.112.112.112 tls://2620:fe::fe tls://2620:fe::fe:9 {
+    tls_servername dns.quad9.net
+  }
   cache
 }
-
