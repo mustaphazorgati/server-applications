@@ -6,6 +6,10 @@
 
 ## copy primary SSH key into $HOME/.ssh/authorized_keys 
 
+## copy GPG key (private + public) from main laptop
+
+## copy .gitconfig from https://github.com/mustaphazorgati/dotfiles/blob/main/.gitconfig
+
 ## Execute devsec hardening guide (ansible script) for this server
 
 ## install docker
@@ -14,6 +18,7 @@
 ## install iptables-persistent
 * sudo apt install iptables-persistent
 * sudo ln -s <PATH_TO_REPO>/iptables/rules.v4 /etc/iptables/rules.v4
+
 * sudo ln -s <PATH_TO_REPO>/iptables/rules.v6 /etc/iptables/rules.v6
 
 ## install unattended-updates
