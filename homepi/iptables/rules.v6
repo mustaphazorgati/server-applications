@@ -25,5 +25,10 @@
 -A INPUT -p ipv6-icmp --icmpv6-type echo-request --match limit --limit 30/minute -j ACCEPT
 -A INPUT -p ipv6-icmp --icmpv6-type echo-reply -j ACCEPT
 
+# REJECT ANYTHING ELSE
+-A INPUT -j REJECT
+-A FORWARD -j REJECT
+
+
 COMMIT
 
