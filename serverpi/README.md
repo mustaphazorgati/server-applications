@@ -7,6 +7,7 @@
 ## copy primary SSH key into $HOME/.ssh/authorized_keys 
 
 ## copy GPG key (private + public) from main laptop
+* append `export GPG_TTY=$(tty)` to ~/.bashrc
 
 ## copy .gitconfig from https://github.com/mustaphazorgati/dotfiles/blob/main/.gitconfig
 
