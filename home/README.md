@@ -35,12 +35,11 @@ APT::Periodic::Unattended-Upgrade "1";
 * /etc/apt/apt.conf.d/50unattended-upgrades
 ```
 Unattended-Upgrade::Allowed-Origins {
-  "Debian:oldstable-security";
-  "Debian:oldstable";
-  "CISOfy:stable";
-  "Debian:oldstable-updates";
+  "Debian:stable";
+  "Docker:bookworm";
+  "Debian:stable-updates";
   "Raspberry Pi Foundation:stable";
-  "Docker:bullseye";
+  "Debian:stable-security";
 };
 
 
