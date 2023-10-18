@@ -1,0 +1,275 @@
+################################################################################
+# GLOBAL                                                                       #
+################################################################################
+
+x-global-service: &global--service
+  stop_grace_period: 10s
+  restart: unless-stopped
+  healthcheck: &global--healthcheck
+    interval: 5s
+    timeout: 3s
+    retries: 3
+    start_period: 30s
+  environment: &global-env
+    TZ: &global-env--timezone ${TZ:?}
+    HOST_IP: ${HOST_IP:?}
+
+################################################################################
+# UNIFI                                                                        #
+################################################################################
+
+x-unifi-hosts: &unifi--hosts
+  UNIFI_CONTROLLER_HOST: &unifi--controller-host unifi-controller
+
+x-unifi-networks: &unifi--networks
+  &unifi--network unifi:
+    name: *unifi--network
+
+x-unifi-volumes: &unifi--volumes
+  &unifi--controller-data-volume unifi_controller_data:
+    name: *unifi--controller-data-volume
+    external: true
+  &unifi--controller-run-volume unifi_controller_run:
+    name: *unifi--controller-run-volume
+    external: true
+
+x-unifi-service: &unifi--service
+  << : *global--service
+  environment:
+    << : *global-env
+    UNIFI_CONTROLLER_DOMAIN: &unifi--controller-domain ${UNIFI_CONTROLLER_DOMAIN:?}
+  networks:
+    - *unifi--network
+
+x-unifi-services: &unifi--services
+  *unifi--controller-host:
+    << : *unifi--service
+    image: jacobalberty/unifi
+    container_name: *unifi--controller-host
+    volumes:
+      - type: volume
+        source: *unifi--controller-data-volume
+        target: /unifi
+      - type: volume
+        source: *unifi--controller-run-volume
+        target: /unifi/run
+      - type: bind
+        source: ./unifi/backups
+        target: /unifi/data/backup
+      - type: bind
+        source: ./unifi/scripts
+        target: /run
+    environment:
+      << : *global-env
+      UNIFI_STDOUT: true
+    ports:
+      - 3478:3478/udp # STUN
+      - 10001:10001/udp # AP discovery
+
+###############################################################################
+# VAULTWARDEN                                                                 #
+###############################################################################
+
+x-vaultwarden-hosts: &vaultwarden--hosts
+  VAULTWARDEN_SERVER_HOST: &vaultwarden--server-host vaultwarden-server
+  # WARNING: Need to change VAULTWARDEN_POSTGRES_HOST in .env too
+  VAULTWARDEN_POSTGRES_HOST: &vaultwarden--postgres-host vaultwarden-postgres
+
+x-vaultwarden-networks: &vaultwarden--networks
+  &vaultwarden--proxy-network vaultwarden-proxy:
+    name: *vaultwarden--proxy-network
+  &vaultwarden--network vaultwarden:
+    name: *vaultwarden--network
+
+x-vaultwarden-volumes: &vaultwarden--volumes
+  &vaultwarden--server-data vaultwarden-server_data:
+    name: *vaultwarden--server-data
+    external: true
+  &vaultwarden--postgres-data vaultwarden-postgres_data:
+    name: *vaultwarden--postgres-data
+    external: true
+
+
+x-vaultwarden-service: &vaultwarden--service
+  << : *global--service
+  environment: &vaultwarden-env
+    << :
+      - *global-env
+      - *vaultwarden--hosts
+  networks:
+    - *vaultwarden--network
+
+x-vaultwarden--services: &vaultwarden--services
+  *vaultwarden--postgres-host:
+    << : *vaultwarden--service
+    container_name: *vaultwarden--postgres-host
+    image: postgres:15
+    volumes:
+      - type: volume
+        source: *vaultwarden--postgres-data
+        target: /var/lib/postgresql/data
+    healthcheck:
+      << : *global--healthcheck
+      test: [ "CMD-SHELL", "pg_isready" ]
+    environment:
+      << : *vaultwarden-env
+      POSTGRES_PASSWORD: ${VAULTWARDEN_POSTGRES_PASSWORD:?}
+      POSTGRES_USER: ${VAULTWARDEN_POSTGRES_USER:?}
+      POSTGRES_DB: ${VAULTWARDEN_POSTGRES_DB:?}
+      POSTGRES_INITDB_ARGS: --auth-host=scram-sha-256
+  *vaultwarden--server-host:
+    << : *vaultwarden--service
+    container_name: *vaultwarden--server-host
+    depends_on:
+      *vaultwarden--postgres-host:
+        condition: service_healthy
+    image: vaultwarden/server
+    volumes:
+      - type: volume
+        source: *vaultwarden--server-data
+        target: /data
+    networks:
+      - *vaultwarden--network
+      - *vaultwarden--proxy-network
+    environment:
+      << : *vaultwarden-env
+      DOMAIN: https://${VAULTWARDEN_SERVER_DOMAIN:?}
+      SIGNUPS_ALLOWED: 'false'
+      SIGNUPS_VERIFY: 'true'
+      TRASH_AUTO_DELETE_DAYS: 7
+      ADMIN_TOKEN: ${VAULTWARDEN_SERVER_ADMIN_TOKEN:?}
+      PUSH_ENABLED: 'true'
+      PUSH_INSTALLATION_ID: ${VAULTWARDEN_SERVER_PUSH_INSTALLATION_ID:?}
+      PUSH_INSTALLATION_KEY: ${VAULTWARDEN_SERVER_PUSH_INSTALLATION_KEY:?}
+      SMTP_HOST: ${SMTP_HOST:?}
+      SMTP_FROM: ${SMTP_USERNAME:?}
+      SMTP_PORT: ${SMTP_PORT:?}
+      SMTP_SECURITY: ${SMTP_SECURITY:?}
+      SMTP_USERNAME: ${SMTP_USERNAME:?}
+      SMTP_PASSWORD: ${SMTP_PASSWORD:?}
+      SHOW_PASSWORD_HINT: 'false'
+      EXTENDED_LOGGIN: 'true'
+      DATABASE_URL: ${VAULTWARDEN_SERVER_DATABASE_URL:?}
+      YUBICO_CLIENT_ID: ${VAULTWARDEN_SERVER_YUBICO_CLIENT_ID:?}
+      YUBICO_SECRET_KEY: ${VAULTWARDEN_SERVER_YUBICO_SECRET_KEY:?}
+
+###############################################################################
+# DNS                                                                         #
+###############################################################################
+
+x-dns-hosts: &dns--hosts
+  DNS_COREDNS_HOST: &dns--coredns-host coredns
+  DNS_CLOUDLFARE_DDNS_HOST: &dns--cloudflare-ddns-host cloudflare-ddns
+
+x-dns-networks: &dns--networks
+  &dns--cloudflare-ddns-network cloudflare-ddns:
+    name: *dns--cloudflare-ddns-network
+
+x-dns-services: &dns--services
+  *dns--coredns-host:
+    << : *global--service
+    image: coredns/coredns
+    container_name: *dns--coredns-host
+    network_mode: host
+    volumes:
+      - ./coredns:/etc/coredns
+    command: -conf /etc/coredns/Corefile
+    environment:
+      << : *global-env
+      UNIFI_CONTROLLER_DOMAIN: *unifi--controller-domain
+  *dns--cloudflare-ddns-host:
+    << : *global--service
+    image: timothyjmiller/cloudflare-ddns
+    container_name: *dns--cloudflare-ddns-host
+    security_opt:
+      - no-new-privileges:true
+    environment:
+      << : *global-env
+      PUID: 1000
+      PGID: 1000
+    volumes:
+      - type: bind
+        source: ./cloudflare-ddns/config.json
+        target: /config.json
+    networks:
+      - *dns--cloudflare-ddns-network
+
+###############################################################################
+# REVERSE PROXY                                                               #
+###############################################################################
+
+x-reverse-proxy-hosts: &reverse-proxy--hosts
+  CADDY_HOST: &reverse-proxy--caddy-host caddy
+
+x-reverse-proxy-volumes: &reverse-proxy--volumes
+  &reverse-proxy--caddy-data-volume caddy_data:
+    name: *reverse-proxy--caddy-data-volume
+    external: true
+  &reverse-proxy--caddy-config-volume caddy_config:
+    name: *reverse-proxy--caddy-config-volume
+    external: true
+
+x-reverse-proxy-networks: &reverse-proxy--networks
+  &reverse-proxy--caddy-network caddy:
+    name: *reverse-proxy--caddy-network
+
+x-reverse-proxy-services: &reverse-proxy--services
+  *reverse-proxy--caddy-host:
+    << : *global--service
+    image: slothcroissant/caddy-cloudflaredns
+    container_name: *reverse-proxy--caddy-host
+    healthcheck:
+      << : *global--healthcheck
+      test: [ "CMD-SHELL", "wget --tries=1 --spider http://localhost:2019/reverse_proxy/upstreams" ]
+    volumes:
+      - type: bind
+        source: ./caddy
+        target: /etc/caddy
+      - type: volume
+        source: *reverse-proxy--caddy-data-volume
+        target: /data
+      - type: volume
+        source: *reverse-proxy--caddy-config-volume
+        target: /config
+    environment:
+      << :
+        - *global-env
+        - *unifi--hosts
+        - *vaultwarden--hosts
+      CLOUDFLARE_API_TOKEN: ${CLOUDFLARE_API_TOKEN:?}
+      UNIFI_CONTROLLER_DOMAIN: *unifi--controller-domain
+      VAULTWARDEN_SERVER_DOMAIN: ${VAULTWARDEN_SERVER_DOMAIN:?}
+      TLS_EMAIL: ${TLS_EMAIL:?}
+    ports:
+      - 80:80
+      - 443:443
+      - 443:443/udp
+      - 8080:8080
+    networks:
+      - *reverse-proxy--caddy-network
+      - *unifi--network
+      - *vaultwarden--proxy-network
+
+###############################################################################
+# COMPOSE DEFINITIONS                                                         #
+###############################################################################
+
+services:
+  << :
+    - *reverse-proxy--services
+    - *unifi--services
+    - *dns--services
+    - *vaultwarden--services
+
+volumes:
+  << :
+    - *reverse-proxy--volumes
+    - *unifi--volumes
+    - *vaultwarden--volumes
+
+networks:
+  << :
+    - *reverse-proxy--networks
+    - *unifi--networks
+    - *dns--networks
+    - *vaultwarden--networks
