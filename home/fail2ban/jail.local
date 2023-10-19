@@ -8,3 +8,6 @@ maxretry = 3
 
 banaction = %(banaction_allports)s
 
+action  = %(action_)s
+	  telegram
+

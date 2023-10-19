@@ -12,7 +12,6 @@ x-global-service: &global--service
     start_period: 30s
   environment: &global-env
     TZ: &global-env--timezone ${TZ:?}
-    HOST_IP: ${HOST_IP:?}
 
 x-global-hosts: &global--hosts
   GLOBAL_FAIL2BAN_HOST: &global--fail2ban-host fail2ban
@@ -35,18 +34,27 @@ x-global-services: &global--services
       << : *global-env
       PUID: 1000
       PGID: 1000
-      #VERBOSITY: -vv
+      TELEGRAM_API_KEY: ${FAIL2BAN_TELEGRAM_API_KEY:?}
+      TELEGRAM_CHAT_ID: ${FAIL2BAN_TELEGRAM_CHAT_ID:?}
+      SERVER: ${COMPOSE_PROJECT_NAME:?}
     volumes:
       - type: bind
         source: /var/log
         target: /var/log
         read_only: true
+      - type: bind
+        source: /var/log/fail2ban
+        target: /config/log/fail2ban
       - type: volume
         source: *global--fail2ban-config
         target: /config
       - type: bind
         source: ./fail2ban/jail.local
         target: /config/fail2ban/jail.local
+        read_only: true
+      - type: bind
+        source: ./fail2ban/scripts
+        target: /config/fail2ban/scripts
         read_only: true
       - type: bind
         source: ./fail2ban/jail.d/
