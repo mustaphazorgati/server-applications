@@ -197,7 +197,7 @@ x-dns-services: &dns--services
       WEBPASSWORD: ${PIHOLE_WEBPASSWORD:?}
       PIHOLE_DNS_: 192.168.1.3
       PIHOLE_DOMAIN: ${PIHOLE_DOMAIN:?}
-      LOG_FILE: /var/log/pihole-updatelists/pihole-updatelists.log
+      PHUL_LOG_FILE: /var/log/pihole-updatelists/pihole-updatelists.log
       FTLCONF_RATE_LIMIT: 0/0
       FTLCONF_IGNORE_LOCALHOST: yes
       FTLCONF_BLOCK_ICLOUD_PR: "false"
@@ -222,6 +222,9 @@ x-dns-services: &dns--services
       - type: bind
         source: /var/log/pihole-updatelists
         target: /var/log/pihole-updatelists
+      - type: bind
+        source: /var/log/pihole
+        target: /var/log/pihole
 
     networks:
       - *dns--pihole-network
