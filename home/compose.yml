@@ -169,6 +169,64 @@ x-vaultwarden--services: &vaultwarden--services
       YUBICO_SECRET_KEY: ${VAULTWARDEN_SERVER_YUBICO_SECRET_KEY:?}
 
 ###############################################################################
+# DNS                                                                         #
+###############################################################################
+
+x-dns-hosts: &dns--hosts
+  PIHOLE_HOST: &dns--pihole-host pihole
+
+x-dns-volumes: &dns--volumes
+  &dns--pihole-dnsmasqd-volume pihole_dnsmasq.d:
+    name: *dns--pihole-dnsmasqd-volume
+    external: true
+  &dns--pihole-volume pihole:
+    name: *dns--pihole-volume
+    external: true
+
+x-dns-networks: &dns--networks
+  &dns--pihole-network pihole:
+    name: *dns--pihole-network
+
+x-dns-services: &dns--services
+  *dns--pihole-host:
+    << : *global--service
+    image: jacklul/pihole
+    container_name: *dns--pihole-host
+    environment:
+      << : *global-env
+      WEBPASSWORD: ${PIHOLE_WEBPASSWORD:?}
+      PIHOLE_DNS_: 192.168.1.3
+      PIHOLE_DOMAIN: ${PIHOLE_DOMAIN:?}
+      LOG_FILE: /var/log/pihole-updatelists/pihole-updatelists.log
+      FTLCONF_RATE_LIMIT: 0/0
+      FTLCONF_IGNORE_LOCALHOST: yes
+      FTLCONF_BLOCK_ICLOUD_PR: "false"
+      FTLCONF_PRIVACYLEVEL: 0
+    ports: 
+      - 53:53/tcp
+      - 53:53/udp
+    volumes:
+      - type: volume
+        source: *dns--pihole-volume
+        target: /etc/pihole
+      - type: volume
+        source: *dns--pihole-dnsmasqd-volume
+        target: /etc/dnsmasq.d
+      - type: bind
+        source: ./pihole/custom.list
+        target: /etc/pihole/custom.list
+        read_only: true
+      - type: bind
+        source: ./pihole/pihole-updatelists
+        target: /etc/pihole-updatelists
+      - type: bind
+        source: /var/log/pihole-updatelists
+        target: /var/log/pihole-updatelists
+
+    networks:
+      - *dns--pihole-network
+
+###############################################################################
 # REVERSE PROXY                                                               #
 ###############################################################################
 
@@ -192,6 +250,12 @@ x-reverse-proxy-services: &reverse-proxy--services
     << : *global--service
     image: slothcroissant/caddy-cloudflaredns
     container_name: *reverse-proxy--caddy-host
+    depends_on:
+      *vaultwarden--server-host:
+        condition: service_healthy
+      *dns--pihole-host:
+        condition: service_healthy
+      
     healthcheck:
       << : *global--healthcheck
       test: [ "CMD-SHELL", "wget --tries=1 --spider http://localhost:2019/reverse_proxy/upstreams" ]
@@ -212,14 +276,17 @@ x-reverse-proxy-services: &reverse-proxy--services
       << :
         - *global-env
         - *vaultwarden--hosts
+        - *dns--hosts
       CLOUDFLARE_API_TOKEN: ${CLOUDFLARE_API_TOKEN:?}
       VAULTWARDEN_SERVER_DOMAIN: ${VAULTWARDEN_SERVER_DOMAIN:?}
+      PIHOLE_DOMAIN: ${PIHOLE_DOMAIN:?}
       TLS_EMAIL: ${TLS_EMAIL:?}
     ports:
-      - 80:80
-      - 443:443
+      - 80:80/tcp
+      - 443:443/tcp
     networks:
       - *vaultwarden--proxy-network
+      - *dns--pihole-network
 
 ###############################################################################
 # COMPOSE DEFINITIONS                                                         #
@@ -230,14 +297,17 @@ services:
     - *global--services 
     - *reverse-proxy--services
     - *vaultwarden--services
+    - *dns--services
 
 volumes:
   << :
     - *global--volumes
     - *reverse-proxy--volumes
     - *vaultwarden--volumes
+    - *dns--volumes
 
 networks:
   << :
     - *reverse-proxy--networks
     - *vaultwarden--networks
+    - *dns--networks
