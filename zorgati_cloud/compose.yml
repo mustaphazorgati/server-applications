@@ -1,0 +1,305 @@
+###################################################################
+# GLOBAL                                                          #
+###################################################################
+
+x-global-service: &global-service
+  stop_grace_period: 10s 
+  restart: unless-stopped
+  environment: &global-service-env
+    NC_DOMAIN: &nextcloud-domain ${NC_DOMAIN:?domain for nextcloud needs to be set}
+    TZ: &global-env-timezone ${TZ:?container timezone needs to be set}
+
+x-nextcloud-hosts: &nextcloud-hosts
+  APACHE_HOST: &nextcloud-apache-host "nextcloud-apache"
+  NEXTCLOUD_HOST: &nextcloud-host "nextcloud"
+  COLLABORA_HOST: &nextcloud-collabora-host "nextcloud-collabora"
+  TALK_HOST: &nextcloud-talk-host "nextcloud-talk"
+  ONLYOFFICE_HOST: &nextcloud-onlyoffice-host "nextcloud-onlyoffice"
+  DATABASE_HOST: &nextcloud-postgres-host "nextcloud-postgres"
+  REDIS_HOST: &nextcloud-redis-host "nextcloud-redis"
+  CLAMAV_HOST: &nextcloud-clamav-host "nextcloud-clamav"
+  IMAGINARY_HOST: &nextcloud-imaginary-host "nextcloud-imaginary"
+  FULLTEXTSEARCH_HOST: &nextcloud-fulltextsearch-host "nextcloud-fulltextsearch"
+
+###################################################################
+# CADDY                                                           #
+###################################################################
+
+x-caddy-volumes: &caddy-volumes
+  &caddy-data-volume caddy_data:
+    name: *caddy-data-volume
+  &caddy-config-volume caddy_config:
+    name: *caddy-config-volume
+
+x-caddy-networks: &caddy-networks
+  &caddy-network caddy:
+    name: *caddy-network
+
+x-caddy-services: &caddy-services
+  caddy:
+    << : *global-service
+    image: caddy:latest
+    container_name: caddy
+    volumes:
+      - type: bind
+        source: ./caddy
+        target: /etc/caddy
+      - type: volume
+        source: *caddy-data-volume
+        target: /data
+      - type: volume
+        source: *caddy-config-volume
+        target: /config
+    ports:
+      - 80:80
+      - 443:443
+      - 443:443/udp
+    environment:
+      << : *global-service-env
+      NC_APACHE_HOST: *nextcloud-apache-host
+    networks:
+      - *caddy-network
+
+###################################################################
+# NEXTCLOUD                                                       #
+###################################################################
+
+x-nextcloud-postgres-env: &nextcloud-postgres-env
+  POSTGRES_HOST: *nextcloud-postgres-host
+  POSTGRES_PASSWORD: ${NC_POSTGRES_PWD:?nextcloud postgres password needs to be set}
+  POSTGRES_DB: nextcloud
+  POSTGRES_USER: nextcloud
+
+x-nextcloud-redis-env: &nextcloud-redis-env
+  REDIS_HOST_PASSWORD: ${NC_REDIS_PWD:?nextcloud redis password needs to be set}
+
+x-nextcloud-talk-env: &nextcloud-talk-env
+  TALK_PORT: &nextcloud-talk-port 3478
+  TURN_SECRET: ${NC_TURN_SECRET:?nextcloud turn secret needs to be set}
+  SIGNALING_SECRET: ${NC_SIGNALING_SECRET:?nextcloud talk signaling secret needs to be set}
+  JANUS_API_KEY: ${NC_JANUS_API_KEY:?nextcloud janis api key needs to be set}
+    
+x-nextcloud-volumes: &nextcloud-volumes
+  &nextcloud-apache-volume nextcloud_apache:
+    name: *nextcloud-apache-volume
+  &nextcloud-postgres-volume nextcloud_postgres:
+    name: *nextcloud-postgres-volume
+  &nextcloud-postgres-dump-volume nextcloud_postgres_dump:
+    name: *nextcloud-postgres-dump-volume
+  &nextcloud-redis-volume nextcloud_redis:
+    name: *nextcloud-redis-volume
+  &nextcloud-clamav-volume nextcloud_clamav:
+    name: *nextcloud-clamav-volume
+  &nextcloud-fulltextsearch-volume nextcloud_fulltextsearch:
+    name: *nextcloud-fulltextsearch-volume
+  &nextcloud-volume nextcloud:
+    name: *nextcloud-volume
+  &nextcloud-data-volume nextcloud_data:
+    name: *nextcloud-data-volume
+
+x-nextcloud-networks: &nextcloud-networks
+  &nextcloud-network nextcloud:
+    name: *nextcloud-network
+
+x-nextcloud-service: &nextcloud-service
+  << : *global-service
+  environment: &nextcloud-service-env
+    << :
+      - *global-service-env
+      - *nextcloud-hosts
+  networks:
+    - *nextcloud-network
+
+x-nextcloud-services: &nextcloud-services
+  *nextcloud-postgres-host:
+    << : *nextcloud-service
+    image: nextcloud/aio-postgresql:latest
+    container_name: *nextcloud-postgres-host
+    volumes:
+      - type: volume
+        source: *nextcloud-postgres-volume
+        target: /var/lib/postgresql/data
+      - type: volume
+        source: *nextcloud-postgres-dump-volume
+        target: /mnt/data
+    stop_grace_period: 30s
+    environment:
+      << : 
+        - *nextcloud-service-env
+        - *nextcloud-postgres-env
+      PGTZ: *global-env-timezone
+ 
+  *nextcloud-redis-host:
+    << : *nextcloud-service
+    image: nextcloud/aio-redis:latest
+    container_name: *nextcloud-redis-host
+    volumes:
+      - type: volume
+        source: *nextcloud-redis-volume
+        target: /data
+    environment:
+      << :
+        - *nextcloud-service-env
+        - *nextcloud-redis-env
+  
+  *nextcloud-talk-host:
+    << : *nextcloud-service
+    image: nextcloud/aio-talk:latest
+    container_name: *nextcloud-talk-host
+    expose: 
+      - *nextcloud-talk-port
+      - 3478/udp
+      # TODO: *nextcloud-talk-port + "/udp"
+    environment:
+      << :
+        - *nextcloud-service-env
+        - *nextcloud-talk-env
+ 
+  *nextcloud-clamav-host:
+    << : *nextcloud-service
+    image: nextcloud/aio-clamav:latest
+    container_name: *nextcloud-clamav-host
+    volumes:
+      - type: volume
+        source: *nextcloud-clamav-volume
+        target: /var/lib/clamav
+ 
+  *nextcloud-collabora-host:
+    << : *nextcloud-service
+    image: nextcloud/aio-collabora:latest
+    container_name: *nextcloud-collabora-host
+    environment:
+      << : *nextcloud-service-env
+      aliasgroup1: https://${NC_DOMAIN:?nextcloud domain does not exist}:443
+      extra_params: --o:ssl.enable=false --o:ssl.termination=true --o:logging.level=warning --o:home_mode.enable=true --o:security.seccomp=true
+      dictionaries: de_DE en_GB en_US es_ES fr_FR it nl pt_BR pt_PT ru 
+
+  *nextcloud-imaginary-host:
+    << : *nextcloud-service
+    image: nextcloud/aio-imaginary:latest
+    container_name: *nextcloud-imaginary-host
+  
+  *nextcloud-fulltextsearch-host:
+    << : *nextcloud-service
+    image: nextcloud/aio-fulltextsearch:latest
+    container_name: *nextcloud-fulltextsearch-host
+    volumes:
+      - type: volume
+        source: *nextcloud-fulltextsearch-volume
+        target: /usr/share/elasticsearch/data
+    environment:
+      << : *nextcloud-service-env
+      discovery.type: single-node
+      ES_JAVA_OPTS: -Xms1024M -Xmx1024M
+
+  *nextcloud-host:
+    << : *nextcloud-service
+    image: nextcloud/aio-nextcloud:latest
+    container_name: *nextcloud-host
+    depends_on:
+      - *nextcloud-postgres-host
+      - *nextcloud-redis-host
+      - *nextcloud-clamav-host
+      - *nextcloud-fulltextsearch-host
+      - *nextcloud-imaginary-host
+    volumes:
+      - type: volume
+        source: *nextcloud-volume
+        target: /var/www/html
+      - type: volume
+        source: *nextcloud-data-volume
+        target: &nextcloud-data-dir /mnt/ncdata
+    environment:
+      << :
+        - *nextcloud-service-env
+        - *nextcloud-postgres-env
+        - *nextcloud-redis-env
+        - *nextcloud-talk-env
+      AIO_URL: localhost # value does not matter due to manual install
+      AIO_TOKEN: 123456 # value does not matter due to manual install
+      ADMIN_USER: admin # gets deleted anyway
+      ADMIN_PASSWORD: doesNotMatter # gets deleted anyway
+      NEXTCLOUD_DATA_DIR: *nextcloud-data-dir
+      OVERWRITEHOST: *nextcloud-domain
+      OVERWRITEPROTOCOL: https
+      UPDATE_NEXTCLOUD_APPS: ${UPDATE_NEXTCLOUD_APPS:?nextcloud app update has to be set}
+      PHP_UPLOAD_LIMIT: 20G #has to match APACHE_MAX_SIZE
+      PHP_MEMORY_LIMIT: 4096M
+      PHP_MAX_TIME: &nextcloud-max-time 3600
+      STARTUP_APPS: ${NEXTCLOUD_STARTUP_APPS:?nextcloud startup apps have to be defined}
+      ADDITIONAL_APKS: ${NEXTCLOUD_ADDITIONAL_APKS:?nextcloud additional apks have to be defined}
+      ADDITIONAL_PHP_EXTENSIONS: ${NEXTCLOUD_ADDITIONAL_PHP_EXTENSIONS:?nextcloud php extensions have to be defined}
+      # feature toggles
+      CLAMAV_ENABLED: 'yes'
+      ONLYOFFICE_ENABLED: 'no'
+      COLLABORA_ENABLED: 'yes'
+      TALK_ENABLED: 'yes'
+      IMAGINARY_ENABLED: 'yes'
+      FULLTEXTSEARCH_ENABLED: 'yes'
+      #- ONLYOFFICE_SECRET=${ONLYOFFICE_SECRET}
+
+  *nextcloud-apache-host:
+    << : *nextcloud-service
+    image: nextcloud/aio-apache:latest
+    container_name: *nextcloud-apache-host 
+    depends_on:
+      #- *nextcloud-onlyoffice-host
+      - *nextcloud-collabora-host
+      - *nextcloud-talk-host
+      - *nextcloud-host
+    volumes:
+      - type: volume
+        source: *nextcloud-volume
+        target: /var/www/html
+        read_only: true
+      - type: volume
+        source: *nextcloud-apache-volume
+        target: /mnt/data
+    networks:
+      - *nextcloud-network
+      - *caddy-network
+    expose:
+      - &nextcloud-apache-port 80
+    environment:
+      << : *nextcloud-service-env
+      APACHE_PORT: *nextcloud-apache-port
+      APACHE_MAX_SIZE: 21474836480 #20GB - has to match PHP_UPLOAD_LIMIT
+      APACHE_MAX_TIME: *nextcloud-max-time
+
+  #  nextcloud-aio-onlyoffice:
+  #  container_name: nextcloud-aio-onlyoffice
+  #  image: nextcloud/aio-onlyoffice:latest
+  #  environment:
+  #    - TZ=${TIMEZONE}
+  #    - JWT_ENABLED=true
+  #    - JWT_HEADER=AuthorizationJwt
+  #    - JWT_SECRET=${ONLYOFFICE_SECRET}
+  #  volumes:
+  #    - nextcloud_aio_onlyoffice:/var/lib/onlyoffice:rw
+  #  stop_grace_period: 10s
+  #  restart: unless-stopped
+  #  networks:
+  #    - nextcloud-aio
+       
+###################################################################
+# ONLYOFFICE                                                      #
+###################################################################
+
+###################################################################
+# COMPOSE DEFINITIONS                                             #
+###################################################################
+
+services:
+  << :
+    - *caddy-services
+    - *nextcloud-services
+
+volumes:
+  << :
+    - *caddy-volumes
+    - *nextcloud-volumes
+
+networks:
+  << :
+    - *caddy-networks
+    - *nextcloud-networks

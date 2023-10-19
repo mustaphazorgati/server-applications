@@ -1,0 +1,33 @@
+#https://zorgati.cloud {
+#	encode gzip
+#	tls zorgati.mustapha@gmail.com
+#	import /etc/caddy/caddy_security.conf
+#
+#	route {
+#		reverse_proxy https://zorgati.zapto.org
+#	}
+#}
+
+#https://zorgati.email {
+#	tls zorgati.mustapha@gmail.com
+#	reverse_proxy localhost:8080
+##}
+
+https://{$NC_DOMAIN} {
+	encode gzip
+	import /etc/caddy/caddy_security.conf
+	tls zorgati.mustapha@gmail.com
+	reverse_proxy {$NC_APACHE_HOST}:80
+}
+
+#https://aio.zorgati.cloud {
+#	encode gzip
+#	import /etc/caddy/caddy_security.conf
+#	tls zorgati.mustapha@gmail.com
+#
+#	reverse_proxy https://nextcloud-aio-mastercontainer:8080 {
+#		transport http {
+#			tls_insecure_skip_verify
+#		}
+#	}
+#}
