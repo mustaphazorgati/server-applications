@@ -30,6 +30,9 @@ x-global-services: &global--services
       - NET_ADMIN
       - NET_RAW
     network_mode: host
+    healthcheck:
+      << : *global--healthcheck
+      test: [ "CMD-SHELL", "fail2ban-client ping" ]
     environment:
       << : *global-env
       PUID: 1000
@@ -51,6 +54,10 @@ x-global-services: &global--services
       - type: bind
         source: ./fail2ban/jail.local
         target: /config/fail2ban/jail.local
+        read_only: true
+      - type: bind
+        source: ./fail2ban/fail2ban.local
+        target: /config/fail2ban/fail2ban.local
         read_only: true
       - type: bind
         source: ./fail2ban/scripts
