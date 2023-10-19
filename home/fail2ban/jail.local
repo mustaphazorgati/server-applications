@@ -1,0 +1,10 @@
+[DEFAULT]
+bantime.increment = true
+bantime.maxtime = 4w
+bantime.factor = 24
+bantime = 1h
+findtime = 24h
+maxretry = 3
+
+banaction = %(banaction_allports)s
+

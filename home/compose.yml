@@ -14,57 +14,53 @@ x-global-service: &global--service
     TZ: &global-env--timezone ${TZ:?}
     HOST_IP: ${HOST_IP:?}
 
-################################################################################
-# UNIFI                                                                        #
-################################################################################
+x-global-hosts: &global--hosts
+  GLOBAL_FAIL2BAN_HOST: &global--fail2ban-host fail2ban
 
-x-unifi-hosts: &unifi--hosts
-  UNIFI_CONTROLLER_HOST: &unifi--controller-host unifi-controller
-
-x-unifi-networks: &unifi--networks
-  &unifi--network unifi:
-    name: *unifi--network
-
-x-unifi-volumes: &unifi--volumes
-  &unifi--controller-data-volume unifi_controller_data:
-    name: *unifi--controller-data-volume
-    external: true
-  &unifi--controller-run-volume unifi_controller_run:
-    name: *unifi--controller-run-volume
+x-global-volumes: &global--volumes
+  &global--fail2ban-config fail2ban_config:
+    name: *global--fail2ban-config
     external: true
 
-x-unifi-service: &unifi--service
-  << : *global--service
-  environment:
-    << : *global-env
-    UNIFI_CONTROLLER_DOMAIN: &unifi--controller-domain ${UNIFI_CONTROLLER_DOMAIN:?}
-  networks:
-    - *unifi--network
-
-x-unifi-services: &unifi--services
-  *unifi--controller-host:
-    << : *unifi--service
-    image: jacobalberty/unifi
-    container_name: *unifi--controller-host
-    volumes:
-      - type: volume
-        source: *unifi--controller-data-volume
-        target: /unifi
-      - type: volume
-        source: *unifi--controller-run-volume
-        target: /unifi/run
-      - type: bind
-        source: ./unifi/backups
-        target: /unifi/data/backup
-      - type: bind
-        source: ./unifi/scripts
-        target: /run
+x-global-services: &global--services
+  *global--fail2ban-host:
+    << : *global--service
+    container_name: *global--fail2ban-host
+    image: lscr.io/linuxserver/fail2ban
+    cap_add:
+      - NET_ADMIN
+      - NET_RAW
+    network_mode: host
     environment:
       << : *global-env
-      UNIFI_STDOUT: true
-    ports:
-      - 3478:3478/udp # STUN
-      - 10001:10001/udp # AP discovery
+      PUID: 1000
+      PGID: 1000
+      #VERBOSITY: -vv
+    volumes:
+      - type: bind
+        source: /var/log
+        target: /var/log
+        read_only: true
+      - type: volume
+        source: *global--fail2ban-config
+        target: /config
+      - type: bind
+        source: ./fail2ban/jail.local
+        target: /config/fail2ban/jail.local
+        read_only: true
+      - type: bind
+        source: ./fail2ban/jail.d/
+        target: /config/fail2ban/jail.d/
+      - type: bind
+        source: ./fail2ban/filter.d/
+        target: /config/fail2ban/filter.d/
+      - type: bind
+        source: ./fail2ban/action.d/
+        target: /config/fail2ban/action.d/
+      - type: bind
+        source: /var/log/vaultwarden
+        target: /remotelogs/vaultwarden
+        read_only: true
 
 ###############################################################################
 # VAULTWARDEN                                                                 #
@@ -110,7 +106,7 @@ x-vaultwarden--services: &vaultwarden--services
         target: /var/lib/postgresql/data
     healthcheck:
       << : *global--healthcheck
-      test: [ "CMD-SHELL", "pg_isready" ]
+      test: [ "CMD-SHELL", "pg_isready -U ${VAULTWARDEN_POSTGRES_USER:?} -d ${VAULTWARDEN_POSTGRES_DB:?}" ]
     environment:
       << : *vaultwarden-env
       POSTGRES_PASSWORD: ${VAULTWARDEN_POSTGRES_PASSWORD:?}
@@ -128,6 +124,9 @@ x-vaultwarden--services: &vaultwarden--services
       - type: volume
         source: *vaultwarden--server-data
         target: /data
+      - type: bind
+        source: /var/log/vaultwarden
+        target: /var/log/vaultwarden
     networks:
       - *vaultwarden--network
       - *vaultwarden--proxy-network
@@ -141,6 +140,7 @@ x-vaultwarden--services: &vaultwarden--services
       PUSH_ENABLED: 'true'
       PUSH_INSTALLATION_ID: ${VAULTWARDEN_SERVER_PUSH_INSTALLATION_ID:?}
       PUSH_INSTALLATION_KEY: ${VAULTWARDEN_SERVER_PUSH_INSTALLATION_KEY:?}
+      LOG_FILE: /var/log/vaultwarden/vaultwarden.log
       SMTP_HOST: ${SMTP_HOST:?}
       SMTP_FROM: ${SMTP_USERNAME:?}
       SMTP_PORT: ${SMTP_PORT:?}
@@ -152,47 +152,6 @@ x-vaultwarden--services: &vaultwarden--services
       DATABASE_URL: ${VAULTWARDEN_SERVER_DATABASE_URL:?}
       YUBICO_CLIENT_ID: ${VAULTWARDEN_SERVER_YUBICO_CLIENT_ID:?}
       YUBICO_SECRET_KEY: ${VAULTWARDEN_SERVER_YUBICO_SECRET_KEY:?}
-
-###############################################################################
-# DNS                                                                         #
-###############################################################################
-
-x-dns-hosts: &dns--hosts
-  DNS_COREDNS_HOST: &dns--coredns-host coredns
-  DNS_CLOUDLFARE_DDNS_HOST: &dns--cloudflare-ddns-host cloudflare-ddns
-
-x-dns-networks: &dns--networks
-  &dns--cloudflare-ddns-network cloudflare-ddns:
-    name: *dns--cloudflare-ddns-network
-
-x-dns-services: &dns--services
-  *dns--coredns-host:
-    << : *global--service
-    image: coredns/coredns
-    container_name: *dns--coredns-host
-    network_mode: host
-    volumes:
-      - ./coredns:/etc/coredns
-    command: -conf /etc/coredns/Corefile
-    environment:
-      << : *global-env
-      UNIFI_CONTROLLER_DOMAIN: *unifi--controller-domain
-  *dns--cloudflare-ddns-host:
-    << : *global--service
-    image: timothyjmiller/cloudflare-ddns
-    container_name: *dns--cloudflare-ddns-host
-    security_opt:
-      - no-new-privileges:true
-    environment:
-      << : *global-env
-      PUID: 1000
-      PGID: 1000
-    volumes:
-      - type: bind
-        source: ./cloudflare-ddns/config.json
-        target: /config.json
-    networks:
-      - *dns--cloudflare-ddns-network
 
 ###############################################################################
 # REVERSE PROXY                                                               #
@@ -231,23 +190,20 @@ x-reverse-proxy-services: &reverse-proxy--services
       - type: volume
         source: *reverse-proxy--caddy-config-volume
         target: /config
+      - type: bind
+        source: /var/log/caddy
+        target: /var/log/caddy
     environment:
       << :
         - *global-env
-        - *unifi--hosts
         - *vaultwarden--hosts
       CLOUDFLARE_API_TOKEN: ${CLOUDFLARE_API_TOKEN:?}
-      UNIFI_CONTROLLER_DOMAIN: *unifi--controller-domain
       VAULTWARDEN_SERVER_DOMAIN: ${VAULTWARDEN_SERVER_DOMAIN:?}
       TLS_EMAIL: ${TLS_EMAIL:?}
     ports:
       - 80:80
       - 443:443
-      - 443:443/udp
-      - 8080:8080
     networks:
-      - *reverse-proxy--caddy-network
-      - *unifi--network
       - *vaultwarden--proxy-network
 
 ###############################################################################
@@ -256,20 +212,17 @@ x-reverse-proxy-services: &reverse-proxy--services
 
 services:
   << :
+    - *global--services 
     - *reverse-proxy--services
-    - *unifi--services
-    - *dns--services
     - *vaultwarden--services
 
 volumes:
   << :
+    - *global--volumes
     - *reverse-proxy--volumes
-    - *unifi--volumes
     - *vaultwarden--volumes
 
 networks:
   << :
     - *reverse-proxy--networks
-    - *unifi--networks
-    - *dns--networks
     - *vaultwarden--networks

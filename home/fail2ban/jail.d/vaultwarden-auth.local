@@ -1,0 +1,4 @@
+[vaultwarden-auth]
+enabled = true
+chain   = DOCKER-USER
+action  = %(known/action)s

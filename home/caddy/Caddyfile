@@ -1,4 +1,13 @@
 ###############################################################################
+# GLOBAL                                                                      #
+###############################################################################
+{
+	log {
+		output discard
+	}
+}
+
+###############################################################################
 # SNIPPETS                                                                    #
 ###############################################################################
 
@@ -10,6 +19,7 @@
 		resolvers 1.1.1.1
 	}
 }
+
 ###############################################################################
 # VAULTWARDEN                                                                 #
 ###############################################################################
@@ -19,7 +29,7 @@ https://{$VAULTWARDEN_SERVER_DOMAIN} {
 
 	log {
 		level INFO
-		output file /var/log/{$VAULTWARDEN_SERVER_DOMAIN}.log {
+		output file /var/log/caddy/{$VAULTWARDEN_SERVER_DOMAIN}.log {
 			roll_size 10MB
 			roll_keep 10
 		}
@@ -35,26 +45,5 @@ https://{$VAULTWARDEN_SERVER_DOMAIN} {
 		# Send the true remote IP to Rocket, so that bitwarden_rs can put this in the
 		# log, so that fail2ban can ban the correct IP.
 		header_up X-Real-IP {remote_host}
-	}
-}
-
-###############################################################################
-# UNIFI CONTROLLER                                                            #
-###############################################################################
-
-https://{$UNIFI_CONTROLLER_DOMAIN} {
-	import default
-	reverse_proxy https://{$UNIFI_CONTROLLER_HOST}:8443 {
-		header_up -Authorization
-		transport http {
-			tls_insecure_skip_verify
-		}
-	}
-}
-
-http://{$UNIFI_CONTROLLER_DOMAIN}:8080 {
-	import default
-	reverse_proxy http://{$UNIFI_CONTROLLER_HOST}:8080 {
-		header_up -Authorization
 	}
 }

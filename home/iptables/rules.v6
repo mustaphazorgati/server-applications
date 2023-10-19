@@ -8,9 +8,6 @@
 
 # SSH
 -A INPUT -p tcp -m tcp --dport 22    -m conntrack --ctstate NEW,ESTABLISHED -j ACCEPT
-# DNS
--A INPUT -p tcp -m tcp --dport 53    -m conntrack --ctstate NEW,ESTABLISHED -j ACCEPT
--A INPUT -p udp -m udp --dport 53    -m conntrack --ctstate NEW,ESTABLISHED -j ACCEPT
 
 # ICMP
 -A INPUT -p ipv6-icmp --icmpv6-type router-advertisement -j ACCEPT

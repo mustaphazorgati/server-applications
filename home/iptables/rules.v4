@@ -8,26 +8,22 @@
 
 # SSH
 -A INPUT -p tcp -m tcp --dport 22    -m conntrack --ctstate NEW,ESTABLISHED -j ACCEPT
-# DNS
--A INPUT -p tcp -m tcp --dport 53    -m conntrack --ctstate NEW,ESTABLISHED -j ACCEPT
--A INPUT -p udp -m udp --dport 53    -m conntrack --ctstate NEW,ESTABLISHED -j ACCEPT
+# CADDY
+#-A INPUT -p tcp -m tcp --dport 80    -m conntrack --ctstate NEW,ESTABLISHED -j ACCEPT
+#-A INPUT -p tcp -m tcp --dport 443   -m conntrack --ctstate NEW,ESTABLISHED -j ACCEPT
 
 # ICMP
-# V4
 -A INPUT -p icmp -j ACCEPT
 
 # DOCKER
 -N DOCKER-USER
 # CADDY
--A DOCKER-USER -p tcp -m conntrack --ctorigdstport 80    --ctstate NEW,RELATED,ESTABLISHED  -j ACCEPT
--A DOCKER-USER -p tcp -m conntrack --ctorigdstport 443   --ctstate NEW,RELATED,ESTABLISHED  -j ACCEPT
--A DOCKER-USER -p udp -m conntrack --ctorigdstport 443   --ctstate NEW,RELATED,ESTABLISHED  -j ACCEPT
--A DOCKER-USER -p tcp -m conntrack --ctorigdstport 8080  --ctstate NEW,RELATED,ESTABLISHED  -j ACCEPT
-# UNIFI
-## STUN
--A DOCKER-USER -p udp -m conntrack --ctorigdstport 3478  --ctstate NEW,RELATED,ESTABLISHED  -j ACCEPT
-## AP DISCOVERY
--A DOCKER-USER -p udp -m conntrack --ctorigdstport 10001 --ctstate NEW,RELATED,ESTABLISHED  -j ACCEPT
+-A DOCKER-USER -p tcp -m conntrack                       --ctstate RELATED,ESTABLISHED -j ACCEPT
+-A DOCKER-USER -p tcp -m conntrack                       --ctstate INVALID             -j REJECT
+-A DOCKER-USER -p tcp -m conntrack --ctorigdstport 80    --ctstate NEW,ESTABLISHED     -j ACCEPT
+-A DOCKER-USER -p tcp -m conntrack --ctorigdstport 443   --ctstate NEW,ESTABLISHED     -j ACCEPT
+
+
 # REJECT ANY OTHER DOCKER PORT
 -A DOCKER-USER -i eth0 -m conntrack --ctdir ORIGINAL -j REJECT 
 
