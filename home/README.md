@@ -22,6 +22,9 @@
 
 * sudo ln -s <PATH_TO_REPO>/iptables/rules.v6 /etc/iptables/rules.v6
 
+## install chrony
+sudo apt install chrony
+
 ## install unattended-updates
 * sudo apt install unattended-upgrades apt-config-auto-update
 * /etc/apt/apt.conf.d/20auto-upgrades 

@@ -230,6 +230,38 @@ x-dns-services: &dns--services
       - *dns--pihole-network
 
 ###############################################################################
+# HOME ASSISTANT                                                              #
+###############################################################################
+
+x-home-assistant-hosts: &home-assistant--hosts
+  HOME_ASSISTANT_HOST: &home-assistant--host home-assistant
+
+x-home-assistant-networks: &home-assistant--networks
+  &home-assistant--network home-assistant:
+    name: *home-assistant--network
+    external: true
+
+x-home-assistant-services: &home-assistant--services
+  *home-assistant--host:
+    << : *global--service
+    image: ghcr.io/home-assistant/home-assistant:stable
+    container_name: *home-assistant--host
+    volumes:
+      - type: bind
+        source: ./home-assistant
+        target: /config
+      - type: bind
+        source: /etc/localtime
+        target: /etc/localtime
+        read_only: true
+      - type: bind
+        source: /run/dbus
+        target: /run/dbus
+        read_only: true
+    network_mode: host
+    privileged: true
+
+###############################################################################
 # REVERSE PROXY                                                               #
 ###############################################################################
 
@@ -301,6 +333,7 @@ services:
     - *reverse-proxy--services
     - *vaultwarden--services
     - *dns--services
+    - *home-assistant--services
 
 volumes:
   << :
