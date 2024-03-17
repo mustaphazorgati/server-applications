@@ -43,6 +43,27 @@ https://{$PIHOLE_DOMAIN} {
 }
 
 ###############################################################################
+# HOME ASSISTANT                                                              #
+###############################################################################
+
+https://{$HOME_ASSISTANT_DOMAIN} {
+	import default
+
+	log {
+		level INFO
+		output file /var/log/caddy/{$HOME_ASSISTANT_DOMAIN}.log {
+			roll_size 10MB
+			roll_keep 10
+		}
+	}
+
+	reverse_proxy {$HOME_ASSISTANT_HOST}:8123 {
+		# log, so that fail2ban can ban the correct IP.
+		header_up X-Real-IP {remote_host}
+	}
+}
+
+###############################################################################
 # VAULTWARDEN                                                                 #
 ###############################################################################
 

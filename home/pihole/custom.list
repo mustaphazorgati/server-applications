@@ -1,2 +1,3 @@
-192.168.1.54 pi.hole.intern.zorgati.cloud
-192.168.1.3 pi.hole
+10.10.20.20 pihole.server.intern.zorgati.cloud
+10.10.20.20 home.server.intern.zorgati.cloud
+10.10.20.20 vault.zorgati.cloud
