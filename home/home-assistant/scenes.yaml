@@ -1,0 +1,465 @@
+- id: '1710788892529'
+  name: LED on
+  entities:
+    light.wled_soundreactive:
+      effect_list:
+      - ' ♪ 2D Swirl@!,Sensitivity=64,Blur;,Bg Swirl;!'
+      - ' ♪ 2D Waverly@Amplification,Sensitivity=64;;!'
+      - ' ♪ Gravcenter@Rate of fall,Sensitivity=128;,!;!'
+      - ' ♪ Gravcentric@Rate of fall,Sensitivity=128;!;!'
+      - ' ♪ Gravimeter@Rate of fall,Sensitivity=130;,!;!'
+      - ' ♪ Juggles@!,# of balls;,!;!'
+      - ' ♪ Matripix@!,Brightness=64;,!;!'
+      - ' ♪ Midnoise@Fade rate,Maximum length=128;,!;!'
+      - ' ♪ Noisefire@!,!;;'
+      - ' ♪ Noisemeter@Fade rate,Width=128;!,!;!'
+      - ' ♪ Pixels@Fade rate,# of pixels;,!;!'
+      - ' ♪ Pixelwave@!,Sensitivity=64;!,!;!'
+      - ' ♪ Plasmoid@Phase=128,# of pixels=128;,!;!'
+      - ' ♪ Puddlepeak@Fade rate,Puddle size,,Select bin=14,Volume (minimum)=96;!,!;!'
+      - ' ♪ Puddles@Fade rate,Puddle size;!,!;!'
+      - ' ♪ Ripple Peak@Fade rate,Max # of ripples,,Select bin=14,Volume (minimum)=62;!,!;!'
+      - ' ♫ 2D Akemi@Color speed,Dance ☑;Head palette,Arms & Legs,Eyes & Mouth;Face
+        palette'
+      - ' ♫ 2D CenterBars@Bar speed=250,Ripple decay=250,Center ↔ ☑=192,Center ↕ ☑=192,
+        Color ↕ ☑=192;,,Peak Color;!=11'
+      - ' ♫ 2D Funky Plank@Scroll speed,,# of bands;;'
+      - ' ♫ 2D GEQ@Bar speed,Ripple decay;,,Peak Color;!'
+      - ' ♫ Binmap@;!,!;!'
+      - ' ♫ Blurz@Fade rate,Blur amount;,Color mix;!'
+      - ' ♫ DJ Light@Speed;;'
+      - ' ♫ Freqmap@Fade rate,Starting color;,!;!'
+      - ' ♫ Freqmatrix@Time delay,Sound effect,Low bin,High bin,Sensivity;;'
+      - ' ♫ Freqpixels@Fade rate,Starting colour and # of pixels;;'
+      - ' ♫ Freqwave@Time delay,Sound effect,Low bin,High bin,Pre-amp;;'
+      - ' ♫ Gravfreq@Rate of fall,Sensivity=128;,!;!'
+      - ' ♫ Noisemove@Speed of perlin movement,Fade rate;,!;!'
+      - ' ♫ Rocktaves@;,!;!'
+      - ' ♫ Waterfall@!,Adjust color,,Select bin=14, Volume (minimum)=62;!,!;!'
+      - ' ⚙️ ARTI-FX@Speed,Intensity,Custom 1, Custom 2, Custom 3;!;!'
+      - " \U0001F389 audio Fireworks@Intensity=96;!;!"
+      - " \U0001F389 audio Popcorn@Gravity=128,Intensity=200;!;!"
+      - " \U0001F528 audio Comets@Speed=228,Intensity=240;!;!"
+      - " \U0001F528 audio Fw Starburst@Speed=128,Intensity=128;!;!"
+      - " \U0001F528 beat Palette@Speed=164;!;!"
+      - 2D Black Hole@Outer X frequency,Inner X frequency,Inner Y frequency;;
+      - 2D Colored Bursts@Speed,Number of lines;;!
+      - 2D DNA Spiral@Speed,Frequency;;!
+      - 2D DNA@Scroll speed,Blur;;!
+      - 2D Drift@Rotation speed,Blur amount;;!
+      - 2D Fire2012@Speed;;
+      - 2D FireNoise@X scale,Y scale;;
+      - 2D Frizzles@X frequency,Y frequency;;!
+      - 2D Game Of Life@!,Use Palette ☑;!,!;!
+      - 2D Hiphotic@X scale,Y scale;;!
+      - 2D Julia@,Max iterations per pixel,X center,Y center,Area size;;!
+      - 2D Lissajous@X frequency=64,Fadetime,,,Speed;;!
+      - 2D Matrix@Falling speed,Spawning rate,Trail,Custom color ☑;Spawn,Trail;
+      - 2D Metaballs@;;
+      - 2D Noise@Speed,Scale;;!
+      - 2D Plasma Ball@Speed;;!
+      - 2D Polar Lights@Speed,X scale,Palette;;
+      - 2D Pulser@Speed,Blur;;!
+      - 2D Sindots@Speed,Dot distance;;!
+      - 2D Squared Swirl@,,,,Blur;,,;!
+      - 2D Sun Radiation@Variance,Brightness;;
+      - 2D Tartan@X scale,Y scale;;!
+      - 3D Ripples@Speed=128,Interval=128;!;!
+      - 3D Sphere Move@Speed=128,Interval=128;!;!
+      - Android@!,Width;!,!,;!
+      - Aurora@!=24,!;1,2,3;!=50
+      - Blends@Shift speed,Blend speed;1,2,3,!
+      - Blink Rainbow@Frequency,Blink duration;!,!,;!
+      - Blink@!,;!,!,;!
+      - Bouncing Balls@Gravity,# of balls;!,!,;!
+      - Bpm@!=64,;1,2,3;!
+      - Breathe@!,;!,!;!
+      - Candle Multi@Flicker rate=96,Flicker intensity=224;!,!,;0
+      - Candle@Flicker rate=96,Flicker intensity=224;!,!,;0
+      - Candy Cane@!,Width;;
+      - Chase 2@!,Width;!,!,;!
+      - Chase Flash Rnd@!,;,Fx,;!
+      - Chase Flash@!,;Bg,Fx,!;!
+      - Chase Rainbow@!,Width;!,!,;0
+      - Chase Random@!,Width;!,,!;!
+      - Chase@!,Width;!,!,!;!
+      - Chunchun@!,Gap size;!,!,;!
+      - Colorful@!,Saturation;1,2,3;!
+      - Colorloop@!,Saturation;1,2,3;!
+      - Colortwinkles@Fade speed,Spawn speed;1,2,3;!
+      - Colorwaves
+      - Dancing Shadows@!,# of shadows;!,,;!
+      - Dissolve Rnd@Repeat speed,Dissolve speed;,!,;!
+      - Dissolve@Repeat speed,Dissolve speed;!,!,;!
+      - Drip@Gravity,# of drips;!,!;!
+      - Dynamic Smooth
+      - Dynamic@!,!;1,2,3;!
+      - Fade@!,;!,!,;!
+      - Fairy
+      - Fairy Twinkle
+      - Fill Noise
+      - Fire 2012@Spark rate=120,Decay=64;1,2,3;!
+      - Fire Flicker@!,!;!,,;!
+      - Fireworks 1D@Gravity,Firing side;!,!,;!
+      - Fireworks Starburst
+      - Fireworks@Sharpness=96,Frequency=192;!,2,;!=11
+      - Flow
+      - Flow Stripe@Hue speed,Effect speed;;
+      - Glitter
+      - Gradient@!,Spread=16;!,!,;!
+      - Halloween
+      - Halloween Eyes
+      - Heartbeat@!,!;!,!,;!
+      - ICU
+      - Juggle@!=16,Trail=240;!,!,;!
+      - Lake@!,;1,2,3;!
+      - Lighthouse
+      - Lightning
+      - Loading@!,Fade=16;!,!,;!
+      - Meteor Smooth@!,Trail length;!,!,;!
+      - Meteor@!,Trail length;!,!,;!
+      - Multi Comet
+      - Noise 1
+      - Noise 2
+      - Noise 3
+      - Noise 4
+      - Noise Pal
+      - Oscillate
+      - Pacifica
+      - Palette@!,;1,2,3;!
+      - Percent@,% of fill;!,!,;!
+      - Perlin Move@!,# of pixels,fade rate;,!;!
+      - Phased
+      - Phased Noise
+      - Plasma@Phase,;1,2,3;!
+      - Police@!,Width;,Bg,;0
+      - Popcorn
+      - Pride 2015@!,;;
+      - Railway
+      - Rain@Fade rate=128,Frequency=128;!,2,;!
+      - Rainbow Runner@!,Size;Bg,,;!
+      - Rainbow@!,Size;1,2,3;!
+      - Random Colors@!,Fade time;1,2,3;!
+      - Reserved for Elementary
+      - Reserved for PoolNoise
+      - Reserved for Twister
+      - Reserved0
+      - Reserved1
+      - Reserved2
+      - Reserved3
+      - Reserved4
+      - Reserved5
+      - Reserved6
+      - Reserved7
+      - Reserved8
+      - Reserved9
+      - Ripple
+      - Ripple Rainbow
+      - Running Dual
+      - Running@!,Wave width;!,!,;!
+      - Saw@!,Width;!,!,;!
+      - Scan Dual@!,# of dots;!,!,;!
+      - Scan@!,# of dots;!,!,;!
+      - Scanner
+      - Scanner Dual
+      - Sine
+      - Sinelon
+      - Sinelon Dual
+      - Sinelon Rainbow
+      - Solid Glitter@,!;!,,;0
+      - Solid Pattern Tri@,Size;1,2,3;!=0
+      - Solid Pattern@Fg size,Bg size;Fg,Bg,;!=0
+      - Solid@;!;
+      - Sparkle Dark@!,!;Bg,Fx,;!
+      - Sparkle+@!,!;Bg,Fx,;!
+      - Sparkle@!,;!,!,;!
+      - Spots Fade@Spread,Width;!,!,;!
+      - Spots@Spread,Width;!,!,;!
+      - Stream
+      - Stream 2
+      - Strobe Mega@!,!;!,!,;!
+      - Strobe Rainbow@!,;,!,;!
+      - Strobe@!,;!,!,;!
+      - Sunrise@Time [min]=60,;;0
+      - Sweep Random
+      - Sweep@!,!;!,!,;!
+      - TV Simulator
+      - Tetrix@!=224,Width=0;!,!,;!=11
+      - Theater Rainbow@!,Gap size;1,2,3;!
+      - Theater@!,Gap size;!,!,;!
+      - Traffic Light@!,;,!,;!
+      - Tri Chase@!,Size;1,2,3;0
+      - Tri Fade
+      - Tri Wipe@!,Width;1,2,3;0
+      - Twinkle@!,;!,!,;!
+      - Twinklecat
+      - Twinklefox
+      - Twinkleup@!,Intensity;!,!,;!
+      - Two Dots@!,Dot size;1,2,Bg;!
+      - Washing Machine
+      - Wavesins@Speed,Brightness variation,Starting Color,Range of Colors,Color variation;;!
+      - Wipe Random@!,;1,2,3;!
+      - Wipe@!,!;!,!,;!
+      supported_color_modes:
+      - rgbw
+      supported_features: 36
+      friendly_name: WLED-SoundReactive
+      effect: Solid@;!;
+      color_mode: rgbw
+      brightness: 255
+      hs_color:
+      - 27.13
+      - 45.098
+      rgb_color:
+      - 255
+      - 192
+      - 140
+      xy_color:
+      - 0.455
+      - 0.374
+      rgbw_color:
+      - 209
+      - 95
+      - 0
+      - 255
+      state: 'on'
+    select.wled_soundreactive_playlist:
+      options: []
+      friendly_name: WLED-SoundReactive Playlist
+      state: unavailable
+    select.wled_soundreactive_preset:
+      options:
+      - ~ 03-17 18:35:00 ~
+      friendly_name: WLED-SoundReactive Preset
+      state: unknown
+    switch.led_switch_0:
+      friendly_name: LED switch_0
+      state: 'on'
+  metadata: {}
+- id: '1710788918321'
+  name: LED off
+  entities:
+    switch.led_switch_0:
+      friendly_name: LED switch_0
+      state: 'off'
+    light.wled_soundreactive:
+      effect_list:
+      - ' ♪ 2D Swirl@!,Sensitivity=64,Blur;,Bg Swirl;!'
+      - ' ♪ 2D Waverly@Amplification,Sensitivity=64;;!'
+      - ' ♪ Gravcenter@Rate of fall,Sensitivity=128;,!;!'
+      - ' ♪ Gravcentric@Rate of fall,Sensitivity=128;!;!'
+      - ' ♪ Gravimeter@Rate of fall,Sensitivity=130;,!;!'
+      - ' ♪ Juggles@!,# of balls;,!;!'
+      - ' ♪ Matripix@!,Brightness=64;,!;!'
+      - ' ♪ Midnoise@Fade rate,Maximum length=128;,!;!'
+      - ' ♪ Noisefire@!,!;;'
+      - ' ♪ Noisemeter@Fade rate,Width=128;!,!;!'
+      - ' ♪ Pixels@Fade rate,# of pixels;,!;!'
+      - ' ♪ Pixelwave@!,Sensitivity=64;!,!;!'
+      - ' ♪ Plasmoid@Phase=128,# of pixels=128;,!;!'
+      - ' ♪ Puddlepeak@Fade rate,Puddle size,,Select bin=14,Volume (minimum)=96;!,!;!'
+      - ' ♪ Puddles@Fade rate,Puddle size;!,!;!'
+      - ' ♪ Ripple Peak@Fade rate,Max # of ripples,,Select bin=14,Volume (minimum)=62;!,!;!'
+      - ' ♫ 2D Akemi@Color speed,Dance ☑;Head palette,Arms & Legs,Eyes & Mouth;Face
+        palette'
+      - ' ♫ 2D CenterBars@Bar speed=250,Ripple decay=250,Center ↔ ☑=192,Center ↕ ☑=192,
+        Color ↕ ☑=192;,,Peak Color;!=11'
+      - ' ♫ 2D Funky Plank@Scroll speed,,# of bands;;'
+      - ' ♫ 2D GEQ@Bar speed,Ripple decay;,,Peak Color;!'
+      - ' ♫ Binmap@;!,!;!'
+      - ' ♫ Blurz@Fade rate,Blur amount;,Color mix;!'
+      - ' ♫ DJ Light@Speed;;'
+      - ' ♫ Freqmap@Fade rate,Starting color;,!;!'
+      - ' ♫ Freqmatrix@Time delay,Sound effect,Low bin,High bin,Sensivity;;'
+      - ' ♫ Freqpixels@Fade rate,Starting colour and # of pixels;;'
+      - ' ♫ Freqwave@Time delay,Sound effect,Low bin,High bin,Pre-amp;;'
+      - ' ♫ Gravfreq@Rate of fall,Sensivity=128;,!;!'
+      - ' ♫ Noisemove@Speed of perlin movement,Fade rate;,!;!'
+      - ' ♫ Rocktaves@;,!;!'
+      - ' ♫ Waterfall@!,Adjust color,,Select bin=14, Volume (minimum)=62;!,!;!'
+      - ' ⚙️ ARTI-FX@Speed,Intensity,Custom 1, Custom 2, Custom 3;!;!'
+      - " \U0001F389 audio Fireworks@Intensity=96;!;!"
+      - " \U0001F389 audio Popcorn@Gravity=128,Intensity=200;!;!"
+      - " \U0001F528 audio Comets@Speed=228,Intensity=240;!;!"
+      - " \U0001F528 audio Fw Starburst@Speed=128,Intensity=128;!;!"
+      - " \U0001F528 beat Palette@Speed=164;!;!"
+      - 2D Black Hole@Outer X frequency,Inner X frequency,Inner Y frequency;;
+      - 2D Colored Bursts@Speed,Number of lines;;!
+      - 2D DNA Spiral@Speed,Frequency;;!
+      - 2D DNA@Scroll speed,Blur;;!
+      - 2D Drift@Rotation speed,Blur amount;;!
+      - 2D Fire2012@Speed;;
+      - 2D FireNoise@X scale,Y scale;;
+      - 2D Frizzles@X frequency,Y frequency;;!
+      - 2D Game Of Life@!,Use Palette ☑;!,!;!
+      - 2D Hiphotic@X scale,Y scale;;!
+      - 2D Julia@,Max iterations per pixel,X center,Y center,Area size;;!
+      - 2D Lissajous@X frequency=64,Fadetime,,,Speed;;!
+      - 2D Matrix@Falling speed,Spawning rate,Trail,Custom color ☑;Spawn,Trail;
+      - 2D Metaballs@;;
+      - 2D Noise@Speed,Scale;;!
+      - 2D Plasma Ball@Speed;;!
+      - 2D Polar Lights@Speed,X scale,Palette;;
+      - 2D Pulser@Speed,Blur;;!
+      - 2D Sindots@Speed,Dot distance;;!
+      - 2D Squared Swirl@,,,,Blur;,,;!
+      - 2D Sun Radiation@Variance,Brightness;;
+      - 2D Tartan@X scale,Y scale;;!
+      - 3D Ripples@Speed=128,Interval=128;!;!
+      - 3D Sphere Move@Speed=128,Interval=128;!;!
+      - Android@!,Width;!,!,;!
+      - Aurora@!=24,!;1,2,3;!=50
+      - Blends@Shift speed,Blend speed;1,2,3,!
+      - Blink Rainbow@Frequency,Blink duration;!,!,;!
+      - Blink@!,;!,!,;!
+      - Bouncing Balls@Gravity,# of balls;!,!,;!
+      - Bpm@!=64,;1,2,3;!
+      - Breathe@!,;!,!;!
+      - Candle Multi@Flicker rate=96,Flicker intensity=224;!,!,;0
+      - Candle@Flicker rate=96,Flicker intensity=224;!,!,;0
+      - Candy Cane@!,Width;;
+      - Chase 2@!,Width;!,!,;!
+      - Chase Flash Rnd@!,;,Fx,;!
+      - Chase Flash@!,;Bg,Fx,!;!
+      - Chase Rainbow@!,Width;!,!,;0
+      - Chase Random@!,Width;!,,!;!
+      - Chase@!,Width;!,!,!;!
+      - Chunchun@!,Gap size;!,!,;!
+      - Colorful@!,Saturation;1,2,3;!
+      - Colorloop@!,Saturation;1,2,3;!
+      - Colortwinkles@Fade speed,Spawn speed;1,2,3;!
+      - Colorwaves
+      - Dancing Shadows@!,# of shadows;!,,;!
+      - Dissolve Rnd@Repeat speed,Dissolve speed;,!,;!
+      - Dissolve@Repeat speed,Dissolve speed;!,!,;!
+      - Drip@Gravity,# of drips;!,!;!
+      - Dynamic Smooth
+      - Dynamic@!,!;1,2,3;!
+      - Fade@!,;!,!,;!
+      - Fairy
+      - Fairy Twinkle
+      - Fill Noise
+      - Fire 2012@Spark rate=120,Decay=64;1,2,3;!
+      - Fire Flicker@!,!;!,,;!
+      - Fireworks 1D@Gravity,Firing side;!,!,;!
+      - Fireworks Starburst
+      - Fireworks@Sharpness=96,Frequency=192;!,2,;!=11
+      - Flow
+      - Flow Stripe@Hue speed,Effect speed;;
+      - Glitter
+      - Gradient@!,Spread=16;!,!,;!
+      - Halloween
+      - Halloween Eyes
+      - Heartbeat@!,!;!,!,;!
+      - ICU
+      - Juggle@!=16,Trail=240;!,!,;!
+      - Lake@!,;1,2,3;!
+      - Lighthouse
+      - Lightning
+      - Loading@!,Fade=16;!,!,;!
+      - Meteor Smooth@!,Trail length;!,!,;!
+      - Meteor@!,Trail length;!,!,;!
+      - Multi Comet
+      - Noise 1
+      - Noise 2
+      - Noise 3
+      - Noise 4
+      - Noise Pal
+      - Oscillate
+      - Pacifica
+      - Palette@!,;1,2,3;!
+      - Percent@,% of fill;!,!,;!
+      - Perlin Move@!,# of pixels,fade rate;,!;!
+      - Phased
+      - Phased Noise
+      - Plasma@Phase,;1,2,3;!
+      - Police@!,Width;,Bg,;0
+      - Popcorn
+      - Pride 2015@!,;;
+      - Railway
+      - Rain@Fade rate=128,Frequency=128;!,2,;!
+      - Rainbow Runner@!,Size;Bg,,;!
+      - Rainbow@!,Size;1,2,3;!
+      - Random Colors@!,Fade time;1,2,3;!
+      - Reserved for Elementary
+      - Reserved for PoolNoise
+      - Reserved for Twister
+      - Reserved0
+      - Reserved1
+      - Reserved2
+      - Reserved3
+      - Reserved4
+      - Reserved5
+      - Reserved6
+      - Reserved7
+      - Reserved8
+      - Reserved9
+      - Ripple
+      - Ripple Rainbow
+      - Running Dual
+      - Running@!,Wave width;!,!,;!
+      - Saw@!,Width;!,!,;!
+      - Scan Dual@!,# of dots;!,!,;!
+      - Scan@!,# of dots;!,!,;!
+      - Scanner
+      - Scanner Dual
+      - Sine
+      - Sinelon
+      - Sinelon Dual
+      - Sinelon Rainbow
+      - Solid Glitter@,!;!,,;0
+      - Solid Pattern Tri@,Size;1,2,3;!=0
+      - Solid Pattern@Fg size,Bg size;Fg,Bg,;!=0
+      - Solid@;!;
+      - Sparkle Dark@!,!;Bg,Fx,;!
+      - Sparkle+@!,!;Bg,Fx,;!
+      - Sparkle@!,;!,!,;!
+      - Spots Fade@Spread,Width;!,!,;!
+      - Spots@Spread,Width;!,!,;!
+      - Stream
+      - Stream 2
+      - Strobe Mega@!,!;!,!,;!
+      - Strobe Rainbow@!,;,!,;!
+      - Strobe@!,;!,!,;!
+      - Sunrise@Time [min]=60,;;0
+      - Sweep Random
+      - Sweep@!,!;!,!,;!
+      - TV Simulator
+      - Tetrix@!=224,Width=0;!,!,;!=11
+      - Theater Rainbow@!,Gap size;1,2,3;!
+      - Theater@!,Gap size;!,!,;!
+      - Traffic Light@!,;,!,;!
+      - Tri Chase@!,Size;1,2,3;0
+      - Tri Fade
+      - Tri Wipe@!,Width;1,2,3;0
+      - Twinkle@!,;!,!,;!
+      - Twinklecat
+      - Twinklefox
+      - Twinkleup@!,Intensity;!,!,;!
+      - Two Dots@!,Dot size;1,2,Bg;!
+      - Washing Machine
+      - Wavesins@Speed,Brightness variation,Starting Color,Range of Colors,Color variation;;!
+      - Wipe Random@!,;1,2,3;!
+      - Wipe@!,!;!,!,;!
+      supported_color_modes:
+      - rgbw
+      supported_features: 36
+      friendly_name: WLED-SoundReactive
+      effect:
+      color_mode:
+      brightness:
+      hs_color:
+      rgb_color:
+      xy_color:
+      rgbw_color:
+      state: 'off'
+    select.wled_soundreactive_playlist:
+      options: []
+      friendly_name: WLED-SoundReactive Playlist
+      state: unavailable
+    select.wled_soundreactive_preset:
+      options:
+      - ~ 03-17 18:35:00 ~
+      friendly_name: WLED-SoundReactive Preset
+      state: unknown
+  metadata: {}

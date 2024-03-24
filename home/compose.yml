@@ -262,7 +262,7 @@ x-home-assistant-services: &home-assistant--services
     privileged: true
     healthcheck:
       << : *global--healthcheck
-      test: [ "CMD-SHELL", "wget --tries=1 --spider http://localhost:8123/" ]
+      test: [ "CMD-SHELL", "wget --tries=1 --spider http://localhost:8123/manifest.json" ]
 
 ###############################################################################
 # REVERSE PROXY                                                               #
@@ -287,7 +287,8 @@ x-reverse-proxy-networks: &reverse-proxy--networks
         - subnet: 172.28.0.0/16
           gateway: 172.28.0.1
           aux_addresses:
-            # WARNING! This IP is static in the home-assistant trusted proxy configuration
+            # WARNING! This IP is static in the home-assistant trusted proxy configuration 
+            # and in the iptables rules
             *reverse-proxy--caddy-host: &reverse-proxy--caddy-ip 172.28.0.20
 
 x-reverse-proxy-services: &reverse-proxy--services
