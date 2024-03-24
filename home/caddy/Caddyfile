@@ -38,7 +38,7 @@ https://{$DNS_PIHOLE_DOMAIN} {
 	redir /admin* /
 	route {
 		rewrite * /admin/{uri}
-		reverse_proxy {$PIHOLE_HOST}:80
+		reverse_proxy {$DNS_PIHOLE_HOST}:80
 	}
 }
 
