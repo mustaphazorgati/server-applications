@@ -1,3 +1,4 @@
 cloudflare-ddns/config.json
 fail2ban/*.conf
 fail2ban/**/*.conf
+home-assistant/
