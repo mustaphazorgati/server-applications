@@ -24,12 +24,12 @@
 # PI HOLE                                                                     #
 ###############################################################################
 
-https://{$PIHOLE_DOMAIN} {
+https://{$DNS_PIHOLE_DOMAIN} {
 	import default
 
 	log {
 		level INFO
-		output file /var/log/caddy/{$PIHOLE_DOMAIN}.log {
+		output file /var/log/caddy/{$DNS_PIHOLE_DOMAIN}.log {
 			roll_size 10MB
 			roll_keep 10
 		}

@@ -173,7 +173,8 @@ x-vaultwarden--services: &vaultwarden--services
 ###############################################################################
 
 x-dns-hosts: &dns--hosts
-  PIHOLE_HOST: &dns--pihole-host pihole
+  DNS_PIHOLE_HOST: &dns--pihole-host pihole
+  DNS_CLOUDFLARE_DDNS_HOST: &dns--cloudflare-ddns-host cloudflare-ddns
 
 x-dns-volumes: &dns--volumes
   &dns--pihole-dnsmasqd-volume pihole_dnsmasq.d:
@@ -186,6 +187,8 @@ x-dns-volumes: &dns--volumes
 x-dns-networks: &dns--networks
   &dns--pihole-network pihole:
     name: *dns--pihole-network
+  &dns--cloudflare-ddns-network cloudflare-ddns:
+    name: *dns--cloudflare-ddns-network
 
 x-dns-services: &dns--services
   *dns--pihole-host:
@@ -194,9 +197,9 @@ x-dns-services: &dns--services
     container_name: *dns--pihole-host
     environment:
       << : *global-env
-      WEBPASSWORD: ${PIHOLE_WEBPASSWORD:?}
+      WEBPASSWORD: ${DNS_PIHOLE_WEBPASSWORD:?}
       PIHOLE_DNS_: 10.10.20.1
-      PIHOLE_DOMAIN: ${PIHOLE_DOMAIN:?}
+      PIHOLE_DOMAIN: ${DNS_PIHOLE_DOMAIN:?}
       PHUL_LOG_FILE: /var/log/pihole-updatelists/pihole-updatelists.log
       FTLCONF_RATE_LIMIT: 0/0
       FTLCONF_IGNORE_LOCALHOST: yes
@@ -225,9 +228,24 @@ x-dns-services: &dns--services
       - type: bind
         source: /var/log/pihole
         target: /var/log/pihole
-
     networks:
       - *dns--pihole-network
+  *dns--cloudflare-ddns-host:
+    << : *global--service
+    image: timothyjmiller/cloudflare-ddns
+    container_name: *dns--cloudflare-ddns-host
+    security_opt:
+      - no-new-privileges:true
+    environment:
+      << : *global-env
+      PUID: 1000
+      PGID: 1000
+    volumes:
+      - type: bind
+        source: ./cloudflare-ddns/config.json
+        target: /config.json
+    networks:
+      - *dns--cloudflare-ddns-network
 
 ###############################################################################
 # HOME ASSISTANT                                                              #
@@ -330,7 +348,7 @@ x-reverse-proxy-services: &reverse-proxy--services
         - *dns--hosts
       CLOUDFLARE_API_TOKEN: ${CLOUDFLARE_API_TOKEN:?}
       VAULTWARDEN_SERVER_DOMAIN: ${VAULTWARDEN_SERVER_DOMAIN:?}
-      PIHOLE_DOMAIN: ${PIHOLE_DOMAIN:?}
+      DNS_PIHOLE_DOMAIN: ${DNS_PIHOLE_DOMAIN:?}
       HOME_ASSISTANT_DOMAIN: ${HOME_ASSISTANT_DOMAIN:?}
       HOME_ASSISTANT_HOST: host.docker.internal
       TLS_EMAIL: ${TLS_EMAIL:?}
