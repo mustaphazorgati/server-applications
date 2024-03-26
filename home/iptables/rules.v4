@@ -7,15 +7,18 @@
 -A INPUT -m conntrack --ctstate INVALID -j REJECT
 
 # SSH
--A INPUT -p tcp -m tcp                --dport 22    -m conntrack --ctstate NEW,ESTABLISHED -j ACCEPT
--A INPUT -p tcp -m tcp -s 172.28.0.20 --dport 8123  -m conntrack --ctstate NEW,ESTABLISHED -j ACCEPT
+-A INPUT -p tcp                --dport 22    -m conntrack --ctstate NEW,ESTABLISHED -j ACCEPT
+# HOME ASSISTANT
+# CADDY -> WEB PORT
+-A INPUT -p tcp -s 172.28.0.20 --dport 8123  -m conntrack --ctstate NEW,ESTABLISHED -j ACCEPT
+# SHELLY COLOT
+-A INPUT -p udp                --dport 5683  -m conntrack --ctstate NEW,ESTABLISHED -j ACCEPT
 
 # ICMP
 -A INPUT -p icmp -j ACCEPT
 
 # DOCKER
 -N DOCKER-USER
-# CADDY
 -A DOCKER-USER -p tcp -m conntrack                       --ctstate RELATED,ESTABLISHED -j ACCEPT
 -A DOCKER-USER -p tcp -m conntrack                       --ctstate INVALID             -j REJECT
 # PIHOLE
@@ -24,6 +27,7 @@
 # CADDY
 -A DOCKER-USER -p tcp -m conntrack --ctorigdstport 80    --ctstate NEW,ESTABLISHED     -j ACCEPT
 -A DOCKER-USER -p tcp -m conntrack --ctorigdstport 443   --ctstate NEW,ESTABLISHED     -j ACCEPT
+-A DOCKER-USER -p udp -m conntrack --ctorigdstport 443   --ctstate NEW,ESTABLISHED     -j ACCEPT
 
 
 # REJECT ANY OTHER DOCKER PORT

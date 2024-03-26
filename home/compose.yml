@@ -355,6 +355,7 @@ x-reverse-proxy-services: &reverse-proxy--services
     ports:
       - 80:80/tcp
       - 443:443/tcp
+      - 443:443/udp
     networks:
       *vaultwarden--proxy-network:
       *dns--pihole-network:
