@@ -463,3 +463,56 @@
       friendly_name: WLED-SoundReactive Preset
       state: unknown
   metadata: {}
+- id: '1711524618082'
+  name: Esstisch an
+  entities:
+    light.esstisch_lampe_1:
+      supported_color_modes:
+      - brightness
+      color_mode: brightness
+      brightness: 255
+      friendly_name: Esstisch Lampe 1
+      supported_features: 32
+      state: 'on'
+    light.esstisch_lampe_2:
+      supported_color_modes:
+      - brightness
+      color_mode: brightness
+      brightness: 255
+      friendly_name: Esstisch Lampe 2
+      supported_features: 32
+      state: 'on'
+    light.esstisch_lampe_3:
+      supported_color_modes:
+      - brightness
+      color_mode: brightness
+      brightness: 255
+      friendly_name: Esstisch Lampe 3
+      supported_features: 32
+      state: 'on'
+    light.esstisch_lampe_4:
+      supported_color_modes:
+      - brightness
+      color_mode: brightness
+      brightness: 255
+      friendly_name: Esstisch Lampe 4
+      supported_features: 32
+      state: 'on'
+    light.esstisch_lampe_5:
+      supported_color_modes:
+      - brightness
+      color_mode: brightness
+      brightness: 255
+      friendly_name: Esstisch Lampe 5
+      supported_features: 32
+      state: 'on'
+    light.esstisch_lampe_6:
+      supported_color_modes:
+      - brightness
+      color_mode: brightness
+      brightness: 255
+      friendly_name: Esstisch Lampe 6
+      supported_features: 32
+      state: 'on'
+  metadata: {}
+  icon: mdi:lightbulb
