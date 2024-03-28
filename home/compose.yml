@@ -205,6 +205,7 @@ x-dns-services: &dns--services
       FTLCONF_IGNORE_LOCALHOST: yes
       FTLCONF_BLOCK_ICLOUD_PR: "false"
       FTLCONF_PRIVACYLEVEL: 0
+      FTLCONF_LOCAL_IPV4: 10.10.20.20
     ports: 
       - 53:53/tcp
       - 53:53/udp
