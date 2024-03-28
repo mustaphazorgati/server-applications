@@ -187,8 +187,6 @@ x-dns-volumes: &dns--volumes
 x-dns-networks: &dns--networks
   &dns--pihole-network pihole:
     name: *dns--pihole-network
-  &dns--cloudflare-ddns-network cloudflare-ddns:
-    name: *dns--cloudflare-ddns-network
 
 x-dns-services: &dns--services
   *dns--pihole-host:
@@ -245,8 +243,7 @@ x-dns-services: &dns--services
       - type: bind
         source: ./cloudflare-ddns/config.json
         target: /config.json
-    networks:
-      - *dns--cloudflare-ddns-network
+    network_mode: host
 
 ###############################################################################
 # HOME ASSISTANT                                                              #
