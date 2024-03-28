@@ -281,7 +281,7 @@ x-home-assistant-services: &home-assistant--services
     privileged: true
     healthcheck:
       << : *global--healthcheck
-      test: [ "CMD-SHELL", "wget --tries=1 --spider http://localhost:8123/manifest.json" ]
+      test: [ "CMD-SHELL", "wget --tries=1 --spider http://127.0.0.1:8123/manifest.json" ]
 
 ###############################################################################
 # REVERSE PROXY                                                               #
@@ -325,7 +325,7 @@ x-reverse-proxy-services: &reverse-proxy--services
       
     healthcheck:
       << : *global--healthcheck
-      test: [ "CMD-SHELL", "wget --tries=1 --spider http://localhost:2019/reverse_proxy/upstreams" ]
+      test: [ "CMD-SHELL", "wget --tries=1 --spider http://127.0.0.1:2019/reverse_proxy/upstreams" ]
     volumes:
       - type: bind
         source: ./caddy
