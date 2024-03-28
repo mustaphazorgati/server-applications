@@ -79,3 +79,43 @@
       - 78f0ff4058312a3a8788941a9164499b
     data: {}
   mode: single
+- id: '1711624301117'
+  alias: Away Detector
+  description: ''
+  trigger:
+  - platform: state
+    entity_id:
+    - device_tracker.7e_20_13_94_32_d5
+    from: home
+    to: not_home
+  condition: []
+  action:
+  - service: notify.notify
+    metadata: {}
+    data:
+      message: You are not Home anymore
+  - service: light.turn_off
+    metadata: {}
+    data: {}
+    target:
+      entity_id:
+      - light.couch
+      - light.eingang
+      - light.esstisch
+  mode: single
+- id: '1711624343409'
+  alias: Home Detector
+  description: ''
+  trigger:
+  - platform: state
+    entity_id:
+    - device_tracker.7e_20_13_94_32_d5
+    from: not_home
+    to: home
+  condition: []
+  action:
+  - service: notify.notify
+    metadata: {}
+    data:
+      message: You are back Home
+  mode: single
