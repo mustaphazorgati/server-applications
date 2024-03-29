@@ -6,7 +6,7 @@ bantime = 1h
 findtime = 24h
 maxretry = 3
 
-banaction = %(banaction_allports)s
+protocol = all
 
 action  = %(action_)s
 	  telegram

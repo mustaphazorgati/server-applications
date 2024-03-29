@@ -25,7 +25,7 @@ x-global-services: &global--services
   *global--fail2ban-host:
     << : *global--service
     container_name: *global--fail2ban-host
-    image: lscr.io/linuxserver/fail2ban
+    image: lscr.io/linuxserver/fail2ban:1.0.2-r3-ls63
     cap_add:
       - NET_ADMIN
       - NET_RAW
