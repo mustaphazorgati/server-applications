@@ -191,7 +191,7 @@ x-dns-networks: &dns--networks
 x-dns-services: &dns--services
   *dns--pihole-host:
     << : *global--service
-    image: jacklul/pihole
+    image: jacklul/pihole:2024.03.2
     container_name: *dns--pihole-host
     environment:
       << : *global-env
