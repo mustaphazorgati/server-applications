@@ -14,7 +14,7 @@
     data:
       brightness_pct: 100
     target:
-      device_id: 558000d1060bebdc8d5fc38676f66fe4
+      entity_id: light.couch
   mode: single
 - id: '1711413027657'
   alias: Couch aus
@@ -28,10 +28,9 @@
   condition: []
   action:
   - service: light.turn_off
-    target:
-      device_id:
-      - 558000d1060bebdc8d5fc38676f66fe4
     data: {}
+    target:
+      entity_id: light.couch
   mode: single
 - id: '1711413112673'
   alias: Esstisch an
@@ -49,13 +48,7 @@
     data:
       brightness_pct: 100
     target:
-      device_id:
-      - 97fb520e3a1d7f56f58ef4fa9b75be78
-      - 598e57a4af1a721aad809e6f2e7a6bfc
-      - 1b423294bef3cdefdfc43c2be192a187
-      - 48519bf058c8fdc548b56a304f2a5878
-      - deb3202dcf6a315e22b14211a88906d4
-      - 78f0ff4058312a3a8788941a9164499b
+      entity_id: light.esstisch
   mode: single
 - id: '1711413130920'
   alias: Esstisch aus
@@ -69,15 +62,9 @@
   condition: []
   action:
   - service: light.turn_off
-    target:
-      device_id:
-      - 97fb520e3a1d7f56f58ef4fa9b75be78
-      - 598e57a4af1a721aad809e6f2e7a6bfc
-      - 1b423294bef3cdefdfc43c2be192a187
-      - 48519bf058c8fdc548b56a304f2a5878
-      - deb3202dcf6a315e22b14211a88906d4
-      - 78f0ff4058312a3a8788941a9164499b
     data: {}
+    target:
+      entity_id: light.esstisch
   mode: single
 - id: '1711624301117'
   alias: Away Detector
@@ -85,7 +72,7 @@
   trigger:
   - platform: state
     entity_id:
-    - device_tracker.7e_20_13_94_32_d5
+    - device_tracker.musti_s_iphone
     from: home
     to: not_home
   condition: []
@@ -102,6 +89,12 @@
       - light.couch
       - light.eingang
       - light.esstisch
+      - light.schlafzimmer_lampe
+  - service: switch.turn_off
+    metadata: {}
+    data: {}
+    target:
+      entity_id: switch.desk_switch_0
   mode: single
 - id: '1711624343409'
   alias: Home Detector
@@ -109,7 +102,7 @@
   trigger:
   - platform: state
     entity_id:
-    - device_tracker.7e_20_13_94_32_d5
+    - device_tracker.musti_s_iphone
     from: not_home
     to: home
   condition: []
@@ -118,4 +111,26 @@
     metadata: {}
     data:
       message: You are back Home
+  - service: light.turn_on
+    metadata: {}
+    data:
+      brightness_pct: 100
+    target:
+      entity_id: light.eingang
+  - service: light.turn_on
+    metadata: {}
+    data:
+      brightness_pct: 100
+    target:
+      entity_id: light.couch
+  - delay:
+      hours: 0
+      minutes: 5
+      seconds: 0
+      milliseconds: 0
+  - service: light.turn_off
+    metadata: {}
+    data: {}
+    target:
+      entity_id: light.eingang
   mode: single

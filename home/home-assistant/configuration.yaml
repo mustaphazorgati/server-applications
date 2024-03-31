@@ -14,3 +14,8 @@ http:
   use_x_forwarded_for: true
   # static ip of caddy container (defined in ../compose.yml)
   trusted_proxies: 172.28.0.20
+
+homeassistant:
+  customize:
+    zone.home:
+      radius: 20

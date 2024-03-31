@@ -1,13 +1,17 @@
 - id: '1710788892529'
   name: LED on
   entities:
+    switch.led_switch_0:
+      device_class: outlet
+      friendly_name: LED switch_0
+      state: 'on'
     light.wled_soundreactive:
       effect_list:
       - ' ♪ 2D Swirl@!,Sensitivity=64,Blur;,Bg Swirl;!'
       - ' ♪ 2D Waverly@Amplification,Sensitivity=64;;!'
       - ' ♪ Gravcenter@Rate of fall,Sensitivity=128;,!;!'
       - ' ♪ Gravcentric@Rate of fall,Sensitivity=128;!;!'
-      - ' ♪ Gravimeter@Rate of fall,Sensitivity=130;,!;!'
+      - ' ♪ Gravimeter@Rate of fall,Sensitivity=128;,!;!'
       - ' ♪ Juggles@!,# of balls;,!;!'
       - ' ♪ Matripix@!,Brightness=64;,!;!'
       - ' ♪ Midnoise@Fade rate,Maximum length=128;,!;!'
@@ -16,9 +20,9 @@
       - ' ♪ Pixels@Fade rate,# of pixels;,!;!'
       - ' ♪ Pixelwave@!,Sensitivity=64;!,!;!'
       - ' ♪ Plasmoid@Phase=128,# of pixels=128;,!;!'
-      - ' ♪ Puddlepeak@Fade rate,Puddle size,,Select bin=14,Volume (minimum)=96;!,!;!'
+      - ' ♪ Puddlepeak@Fade rate,Puddle size,,Select bin,Volume (minimum);!,!;!'
       - ' ♪ Puddles@Fade rate,Puddle size;!,!;!'
-      - ' ♪ Ripple Peak@Fade rate,Max # of ripples,,Select bin=14,Volume (minimum)=62;!,!;!'
+      - ' ♪ Ripple Peak@Fade rate,Max # of ripples,,Select bin,Volume (minimum);!,!;!'
       - ' ♫ 2D Akemi@Color speed,Dance ☑;Head palette,Arms & Legs,Eyes & Mouth;Face
         palette'
       - ' ♫ 2D CenterBars@Bar speed=250,Ripple decay=250,Center ↔ ☑=192,Center ↕ ☑=192,
@@ -35,13 +39,8 @@
       - ' ♫ Gravfreq@Rate of fall,Sensivity=128;,!;!'
       - ' ♫ Noisemove@Speed of perlin movement,Fade rate;,!;!'
       - ' ♫ Rocktaves@;,!;!'
-      - ' ♫ Waterfall@!,Adjust color,,Select bin=14, Volume (minimum)=62;!,!;!'
-      - ' ⚙️ ARTI-FX@Speed,Intensity,Custom 1, Custom 2, Custom 3;!;!'
-      - " \U0001F389 audio Fireworks@Intensity=96;!;!"
-      - " \U0001F389 audio Popcorn@Gravity=128,Intensity=200;!;!"
-      - " \U0001F528 audio Comets@Speed=228,Intensity=240;!;!"
-      - " \U0001F528 audio Fw Starburst@Speed=128,Intensity=128;!;!"
-      - " \U0001F528 beat Palette@Speed=164;!;!"
+      - ' ♫ Waterfall@!,Adjust color,,Select bin, Volume (minimum);!,!;!'
+      - ' ⚙️ Custom Effect@Speed,Intensity,Custom 1, Custom 2, Custom 3;!;!'
       - 2D Black Hole@Outer X frequency,Inner X frequency,Inner Y frequency;;
       - 2D Colored Bursts@Speed,Number of lines;;!
       - 2D DNA Spiral@Speed,Frequency;;!
@@ -53,7 +52,7 @@
       - 2D Game Of Life@!,Use Palette ☑;!,!;!
       - 2D Hiphotic@X scale,Y scale;;!
       - 2D Julia@,Max iterations per pixel,X center,Y center,Area size;;!
-      - 2D Lissajous@X frequency=64,Fadetime,,,Speed;;!
+      - 2D Lissajous@X frequency,Fadetime;;!
       - 2D Matrix@Falling speed,Spawning rate,Trail,Custom color ☑;Spawn,Trail;
       - 2D Metaballs@;;
       - 2D Noise@Speed,Scale;;!
@@ -206,20 +205,20 @@
       friendly_name: WLED-SoundReactive
       effect: Solid@;!;
       color_mode: rgbw
-      brightness: 255
+      brightness: 51
       hs_color:
-      - 27.13
-      - 45.098
+      - 27.402
+      - 49.804
       rgb_color:
       - 255
-      - 192
-      - 140
+      - 186
+      - 128
       xy_color:
-      - 0.455
-      - 0.374
+      - 0.471
+      - 0.378
       rgbw_color:
-      - 209
-      - 95
+      - 255
+      - 116
       - 0
       - 255
       state: 'on'
@@ -228,18 +227,15 @@
       friendly_name: WLED-SoundReactive Playlist
       state: unavailable
     select.wled_soundreactive_preset:
-      options:
-      - ~ 03-17 18:35:00 ~
+      options: []
       friendly_name: WLED-SoundReactive Preset
-      state: unknown
-    switch.led_switch_0:
-      friendly_name: LED switch_0
-      state: 'on'
+      state: unavailable
   metadata: {}
 - id: '1710788918321'
   name: LED off
   entities:
     switch.led_switch_0:
+      device_class: outlet
       friendly_name: LED switch_0
       state: 'off'
     light.wled_soundreactive:
@@ -248,7 +244,7 @@
       - ' ♪ 2D Waverly@Amplification,Sensitivity=64;;!'
       - ' ♪ Gravcenter@Rate of fall,Sensitivity=128;,!;!'
       - ' ♪ Gravcentric@Rate of fall,Sensitivity=128;!;!'
-      - ' ♪ Gravimeter@Rate of fall,Sensitivity=130;,!;!'
+      - ' ♪ Gravimeter@Rate of fall,Sensitivity=128;,!;!'
       - ' ♪ Juggles@!,# of balls;,!;!'
       - ' ♪ Matripix@!,Brightness=64;,!;!'
       - ' ♪ Midnoise@Fade rate,Maximum length=128;,!;!'
@@ -257,9 +253,9 @@
       - ' ♪ Pixels@Fade rate,# of pixels;,!;!'
       - ' ♪ Pixelwave@!,Sensitivity=64;!,!;!'
       - ' ♪ Plasmoid@Phase=128,# of pixels=128;,!;!'
-      - ' ♪ Puddlepeak@Fade rate,Puddle size,,Select bin=14,Volume (minimum)=96;!,!;!'
+      - ' ♪ Puddlepeak@Fade rate,Puddle size,,Select bin,Volume (minimum);!,!;!'
       - ' ♪ Puddles@Fade rate,Puddle size;!,!;!'
-      - ' ♪ Ripple Peak@Fade rate,Max # of ripples,,Select bin=14,Volume (minimum)=62;!,!;!'
+      - ' ♪ Ripple Peak@Fade rate,Max # of ripples,,Select bin,Volume (minimum);!,!;!'
       - ' ♫ 2D Akemi@Color speed,Dance ☑;Head palette,Arms & Legs,Eyes & Mouth;Face
         palette'
       - ' ♫ 2D CenterBars@Bar speed=250,Ripple decay=250,Center ↔ ☑=192,Center ↕ ☑=192,
@@ -276,13 +272,8 @@
       - ' ♫ Gravfreq@Rate of fall,Sensivity=128;,!;!'
       - ' ♫ Noisemove@Speed of perlin movement,Fade rate;,!;!'
       - ' ♫ Rocktaves@;,!;!'
-      - ' ♫ Waterfall@!,Adjust color,,Select bin=14, Volume (minimum)=62;!,!;!'
-      - ' ⚙️ ARTI-FX@Speed,Intensity,Custom 1, Custom 2, Custom 3;!;!'
-      - " \U0001F389 audio Fireworks@Intensity=96;!;!"
-      - " \U0001F389 audio Popcorn@Gravity=128,Intensity=200;!;!"
-      - " \U0001F528 audio Comets@Speed=228,Intensity=240;!;!"
-      - " \U0001F528 audio Fw Starburst@Speed=128,Intensity=128;!;!"
-      - " \U0001F528 beat Palette@Speed=164;!;!"
+      - ' ♫ Waterfall@!,Adjust color,,Select bin, Volume (minimum);!,!;!'
+      - ' ⚙️ Custom Effect@Speed,Intensity,Custom 1, Custom 2, Custom 3;!;!'
       - 2D Black Hole@Outer X frequency,Inner X frequency,Inner Y frequency;;
       - 2D Colored Bursts@Speed,Number of lines;;!
       - 2D DNA Spiral@Speed,Frequency;;!
@@ -294,7 +285,7 @@
       - 2D Game Of Life@!,Use Palette ☑;!,!;!
       - 2D Hiphotic@X scale,Y scale;;!
       - 2D Julia@,Max iterations per pixel,X center,Y center,Area size;;!
-      - 2D Lissajous@X frequency=64,Fadetime,,,Speed;;!
+      - 2D Lissajous@X frequency,Fadetime;;!
       - 2D Matrix@Falling speed,Spawning rate,Trail,Custom color ☑;Spawn,Trail;
       - 2D Metaballs@;;
       - 2D Noise@Speed,Scale;;!
@@ -458,61 +449,7 @@
       friendly_name: WLED-SoundReactive Playlist
       state: unavailable
     select.wled_soundreactive_preset:
-      options:
-      - ~ 03-17 18:35:00 ~
+      options: []
       friendly_name: WLED-SoundReactive Preset
-      state: unknown
+      state: unavailable
   metadata: {}
-- id: '1711524618082'
-  name: Esstisch an
-  entities:
-    light.esstisch_lampe_1:
-      supported_color_modes:
-      - brightness
-      color_mode: brightness
-      brightness: 255
-      friendly_name: Esstisch Lampe 1
-      supported_features: 32
-      state: 'on'
-    light.esstisch_lampe_2:
-      supported_color_modes:
-      - brightness
-      color_mode: brightness
-      brightness: 255
-      friendly_name: Esstisch Lampe 2
-      supported_features: 32
-      state: 'on'
-    light.esstisch_lampe_3:
-      supported_color_modes:
-      - brightness
-      color_mode: brightness
-      brightness: 255
-      friendly_name: Esstisch Lampe 3
-      supported_features: 32
-      state: 'on'
-    light.esstisch_lampe_4:
-      supported_color_modes:
-      - brightness
-      color_mode: brightness
-      brightness: 255
-      friendly_name: Esstisch Lampe 4
-      supported_features: 32
-      state: 'on'
-    light.esstisch_lampe_5:
-      supported_color_modes:
-      - brightness
-      color_mode: brightness
-      brightness: 255
-      friendly_name: Esstisch Lampe 5
-      supported_features: 32
-      state: 'on'
-    light.esstisch_lampe_6:
-      supported_color_modes:
-      - brightness
-      color_mode: brightness
-      brightness: 255
-      friendly_name: Esstisch Lampe 6
-      supported_features: 32
-      state: 'on'
-  metadata: {}
-  icon: mdi:lightbulb
