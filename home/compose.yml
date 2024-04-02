@@ -231,7 +231,7 @@ x-dns-services: &dns--services
       - *dns--pihole-network
   *dns--cloudflare-ddns-host:
     << : *global--service
-    image: timothyjmiller/cloudflare-ddns
+    image: timothyjmiller/cloudflare-ddns:latest
     container_name: *dns--cloudflare-ddns-host
     security_opt:
       - no-new-privileges:true
