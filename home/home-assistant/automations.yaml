@@ -95,6 +95,10 @@
     data: {}
     target:
       entity_id: switch.desk_switch_0
+  - service: scene.turn_on
+    metadata: {}
+    target:
+      entity_id: scene.led_off
   mode: single
 - id: '1711624343409'
   alias: Home Detector
