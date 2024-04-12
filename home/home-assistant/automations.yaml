@@ -138,3 +138,25 @@
     target:
       entity_id: light.eingang
   mode: single
+- id: '1712587000202'
+  alias: Wasser erkannt
+  description: ''
+  trigger:
+  - platform: state
+    entity_id:
+    - binary_sensor.waschbecken_kuche_flood
+    - binary_sensor.shellyflood_485519ee0d7e_flood
+    to: 'on'
+  action:
+  - service: notify.notify
+    metadata: {}
+    data:
+      title: ALARM !! WASSER !! ALARM
+      message: 'Gerät: {{ trigger.to_state.name }}'
+      data:
+        push:
+          sound:
+            name: US-EN-Alexa-Water-Detected-Generic.wav
+            critical: 1
+            volume: 1
+  mode: single
