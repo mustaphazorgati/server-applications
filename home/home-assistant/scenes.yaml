@@ -1,10 +1,6 @@
 - id: '1710788892529'
   name: LED on
   entities:
-    switch.led_switch_0:
-      device_class: outlet
-      friendly_name: LED switch_0
-      state: 'on'
     light.wled_soundreactive:
       effect_list:
       - ' ♪ 2D Swirl@!,Sensitivity=64,Blur;,Bg Swirl;!'
@@ -201,8 +197,6 @@
       - Wipe@!,!;!,!,;!
       supported_color_modes:
       - rgbw
-      supported_features: 36
-      friendly_name: WLED-SoundReactive
       effect: Solid@;!;
       color_mode: rgbw
       brightness: 51
@@ -221,6 +215,8 @@
       - 116
       - 0
       - 255
+      friendly_name: WLED-SoundReactive
+      supported_features: 36
       state: 'on'
     select.wled_soundreactive_playlist:
       options: []
@@ -230,14 +226,13 @@
       options: []
       friendly_name: WLED-SoundReactive Preset
       state: unavailable
+    switch.1_pm_led_switch_0:
+      friendly_name: '1 PM: LED switch_0'
+      state: 'on'
   metadata: {}
 - id: '1710788918321'
   name: LED off
   entities:
-    switch.led_switch_0:
-      device_class: outlet
-      friendly_name: LED switch_0
-      state: 'off'
     light.wled_soundreactive:
       effect_list:
       - ' ♪ 2D Swirl@!,Sensitivity=64,Blur;,Bg Swirl;!'
@@ -434,8 +429,6 @@
       - Wipe@!,!;!,!,;!
       supported_color_modes:
       - rgbw
-      supported_features: 36
-      friendly_name: WLED-SoundReactive
       effect:
       color_mode:
       brightness:
@@ -443,6 +436,8 @@
       rgb_color:
       xy_color:
       rgbw_color:
+      friendly_name: WLED-SoundReactive
+      supported_features: 36
       state: 'off'
     select.wled_soundreactive_playlist:
       options: []
@@ -452,4 +447,7 @@
       options: []
       friendly_name: WLED-SoundReactive Preset
       state: unavailable
+    switch.1_pm_led_switch_0:
+      friendly_name: '1 PM: LED switch_0'
+      state: 'off'
   metadata: {}

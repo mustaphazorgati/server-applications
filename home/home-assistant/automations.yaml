@@ -1,71 +1,3 @@
-- id: '1711412922995'
-  alias: Couch an
-  description: ''
-  trigger:
-  - type: powered
-    platform: device
-    device_id: ad8b25fb9c8bca94154111c6bf4f001e
-    entity_id: 74a8418a735465796401d2bd7716f086
-    domain: binary_sensor
-  condition: []
-  action:
-  - service: light.turn_on
-    metadata: {}
-    data:
-      brightness_pct: 100
-    target:
-      entity_id: light.couch
-  mode: single
-- id: '1711413027657'
-  alias: Couch aus
-  description: ''
-  trigger:
-  - type: powered
-    platform: device
-    device_id: ad8b25fb9c8bca94154111c6bf4f001e
-    entity_id: 0dbffd293dd7591b9de64be93e01a9eb
-    domain: binary_sensor
-  condition: []
-  action:
-  - service: light.turn_off
-    data: {}
-    target:
-      entity_id: light.couch
-  mode: single
-- id: '1711413112673'
-  alias: Esstisch an
-  description: ''
-  trigger:
-  - type: powered
-    platform: device
-    device_id: ad8b25fb9c8bca94154111c6bf4f001e
-    entity_id: 14cd00ec73898d8d70c5ee0d583df262
-    domain: binary_sensor
-  condition: []
-  action:
-  - service: light.turn_on
-    metadata: {}
-    data:
-      brightness_pct: 100
-    target:
-      entity_id: light.esstisch
-  mode: single
-- id: '1711413130920'
-  alias: Esstisch aus
-  description: ''
-  trigger:
-  - type: powered
-    platform: device
-    device_id: ad8b25fb9c8bca94154111c6bf4f001e
-    entity_id: 7dbd6355ef1837d2cd7ce0895f90cbc4
-    domain: binary_sensor
-  condition: []
-  action:
-  - service: light.turn_off
-    data: {}
-    target:
-      entity_id: light.esstisch
-  mode: single
 - id: '1711624301117'
   alias: Away Detector
   description: ''
@@ -94,7 +26,7 @@
     metadata: {}
     data: {}
     target:
-      entity_id: switch.desk_switch_0
+      device_id: ce391c61d887f8b94aaef49fd50c8d26
   - service: scene.turn_on
     metadata: {}
     target:
@@ -144,8 +76,8 @@
   trigger:
   - platform: state
     entity_id:
-    - binary_sensor.waschbecken_kuche_flood
-    - binary_sensor.shellyflood_485519ee0d7e_flood
+    - binary_sensor.flood_badezimmer_flood
+    - binary_sensor.flood_kuche_flood
     to: 'on'
   action:
   - service: notify.notify
