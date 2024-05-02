@@ -92,3 +92,20 @@
             critical: 1
             volume: 1
   mode: single
+- id: '1714679978597'
+  alias: Couch Schalter
+  description: ''
+  trigger:
+  - platform: state
+    entity_id:
+    - binary_sensor.oben_links_input_2
+    to: 'on'
+  condition: []
+  action:
+  - service: light.toggle
+    metadata: {}
+    data:
+      brightness_pct: 100
+    target:
+      entity_id: light.couch
+  mode: single
