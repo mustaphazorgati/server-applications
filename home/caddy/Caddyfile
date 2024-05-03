@@ -31,8 +31,12 @@
 	}
 }
 
-(internal) {
+(matchers) {
 	@denied not remote_ip 10.10.10.0/24 192.168.255.0/24
+}
+
+(internal) {
+	import matchers
 	route @denied {
 		abort
 	}
@@ -73,10 +77,10 @@ https://{$HOME_ASSISTANT_DOMAIN} {
 
 https://{$VAULTWARDEN_SERVER_DOMAIN} {
 	import default {$VAULTWARDEN_SERVER_DOMAIN}
+	import matchers
 
-	# Harden Admin Page
-	basicauth /admin* {
-		admin JDJhJDE0JEh6WlRaWjlGbXRKWUU4MmpLTDBSZnVZSnVrVDVVRk02NTYzNVRoZElxR0FoaHdmYVpPSDNh
+	route /admin* {
+		abort @denied
 	}
 
 	# Proxy the Root directory to Rocket
