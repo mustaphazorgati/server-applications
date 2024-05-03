@@ -260,7 +260,7 @@ x-home-assistant-networks: &home-assistant--networks
 x-home-assistant-services: &home-assistant--services
   *home-assistant--host:
     << : *global--service
-    image: ghcr.io/home-assistant/home-assistant:2024.5.0
+    image: ghcr.io/home-assistant/home-assistant:2024.5.1
     container_name: *home-assistant--host
     volumes:
       - type: bind
