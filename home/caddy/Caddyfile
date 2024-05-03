@@ -11,7 +11,18 @@
 # SNIPPETS                                                                    #
 ###############################################################################
 
+(log) {
+	log {
+		level INFO
+		output file /var/log/caddy/{args[0]}.log {
+			roll_size 10MB
+			roll_keep 10
+		}
+	}
+}
+
 (default) {
+	import log {args[0]}
 	encode gzip
 	import /etc/caddy/caddy_security.conf
 	tls {$TLS_EMAIL} {
@@ -25,15 +36,7 @@
 ###############################################################################
 
 https://{$DNS_PIHOLE_DOMAIN} {
-	import default
-
-	log {
-		level INFO
-		output file /var/log/caddy/{$DNS_PIHOLE_DOMAIN}.log {
-			roll_size 10MB
-			roll_keep 10
-		}
-	}
+	import default {$DNS_PIHOLE_DOMAIN}
 
 	redir /admin* /
 	route {
@@ -47,15 +50,7 @@ https://{$DNS_PIHOLE_DOMAIN} {
 ###############################################################################
 
 https://{$HOME_ASSISTANT_DOMAIN} {
-	import default
-
-	log {
-		level INFO
-		output file /var/log/caddy/{$HOME_ASSISTANT_DOMAIN}.log {
-			roll_size 10MB
-			roll_keep 10
-		}
-	}
+	import default {$HOME_ASSISTANT_DOMAIN}
 
 	reverse_proxy {$HOME_ASSISTANT_HOST}:8123 {
 		# log, so that fail2ban can ban the correct IP.
@@ -68,15 +63,7 @@ https://{$HOME_ASSISTANT_DOMAIN} {
 ###############################################################################
 
 https://{$VAULTWARDEN_SERVER_DOMAIN} {
-	import default
-
-	log {
-		level INFO
-		output file /var/log/caddy/{$VAULTWARDEN_SERVER_DOMAIN}.log {
-			roll_size 10MB
-			roll_keep 10
-		}
-	}
+	import default {$VAULTWARDEN_SERVER_DOMAIN}
 
 	# Harden Admin Page
 	basicauth /admin* {
