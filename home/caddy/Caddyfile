@@ -31,12 +31,20 @@
 	}
 }
 
+(internal) {
+	@denied not remote_ip 10.10.10.0/24 192.168.255.0/24
+	route @denied {
+		abort
+	}
+}
+
 ###############################################################################
 # PI HOLE                                                                     #
 ###############################################################################
 
 https://{$DNS_PIHOLE_DOMAIN} {
 	import default {$DNS_PIHOLE_DOMAIN}
+	import internal
 
 	redir /admin* /
 	route {
@@ -51,6 +59,7 @@ https://{$DNS_PIHOLE_DOMAIN} {
 
 https://{$HOME_ASSISTANT_DOMAIN} {
 	import default {$HOME_ASSISTANT_DOMAIN}
+	import internal
 
 	reverse_proxy {$HOME_ASSISTANT_HOST}:8123 {
 		# log, so that fail2ban can ban the correct IP.
