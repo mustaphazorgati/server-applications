@@ -25,7 +25,7 @@ x-global-services: &global--services
   *global--fail2ban-host:
     << : *global--service
     container_name: *global--fail2ban-host
-    image: lscr.io/linuxserver/fail2ban:1.0.2
+    image: linuxserver/fail2ban:1.0.2
     cap_add:
       - NET_ADMIN
       - NET_RAW
@@ -260,7 +260,7 @@ x-home-assistant-networks: &home-assistant--networks
 x-home-assistant-services: &home-assistant--services
   *home-assistant--host:
     << : *global--service
-    image: ghcr.io/home-assistant/home-assistant:2024.5.2
+    image: homeassistant/home-assistant:2024.5.2
     container_name: *home-assistant--host
     volumes:
       - type: bind
