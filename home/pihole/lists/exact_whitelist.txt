@@ -137,3 +137,4 @@ chrome.google.com
 eu-office.events.data.microsoft.com
 web.docker.com
 microsoft365.com
+tracker-api.scoober.com
