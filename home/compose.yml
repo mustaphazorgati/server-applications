@@ -310,7 +310,7 @@ x-reverse-proxy-networks: &reverse-proxy--networks
 x-reverse-proxy-services: &reverse-proxy--services
   *reverse-proxy--caddy-host:
     << : *global--service
-    image: slothcroissant/caddy-cloudflaredns:v2.7.6
+    image: slothcroissant/caddy-cloudflaredns:v2.8.1
     container_name: *reverse-proxy--caddy-host
     depends_on:
       *vaultwarden--server-host:
