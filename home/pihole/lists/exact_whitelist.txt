@@ -139,4 +139,4 @@ web.docker.com
 microsoft365.com
 tracker-api.scoober.com
 www.jetbrains.com
-
+track.toggl.com
