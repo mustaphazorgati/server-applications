@@ -140,3 +140,4 @@ microsoft365.com
 tracker-api.scoober.com
 www.jetbrains.com
 track.toggl.com
+challenges.cloudflare.com 
