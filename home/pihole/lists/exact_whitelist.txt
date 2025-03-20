@@ -141,3 +141,4 @@ tracker-api.scoober.com
 www.jetbrains.com
 track.toggl.com
 challenges.cloudflare.com 
+collector.github.com
