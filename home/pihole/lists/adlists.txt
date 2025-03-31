@@ -9,14 +9,12 @@ https://gitlab.com/quidsup/notrack-blocklists/raw/master/notrack-blocklist.txt
 https://raw.githubusercontent.com/notracking/hosts-blocklists/master/hostnames.txt		
 DefaultSmartTVsExclude
 https://s3.amazonaws.com/lists.disconnect.me/simple_tracking.txt
-https://gitlab.com/my-privacy-dns/matrix/matrix/-/raw/master/source/tracking/domains.list
 https://raw.githubusercontent.com/r-a-y/mobile-hosts/master/AdguardApps.txt
 https://raw.githubusercontent.com/r-a-y/mobile-hosts/master/AdguardMobileAds.txt
 https://raw.githubusercontent.com/deathbybandaid/piholeparser/master/Subscribable-Lists/ParsedBlacklists/AdAway-Default-Blocklist.txt
 https://raw.githubusercontent.com/deathbybandaid/piholeparser/master/Subscribable-Lists/ParsedBlacklists/FadeMind-addSpam.txt
 https://raw.githubusercontent.com/mitchellkrogza/The-Big-List-of-Hacked-Malware-Web-Sites/master/hacked-domains.list
 https://raw.githubusercontent.com/Perflyst/PiHoleBlocklist/master/AmazonFireTV.txt
-https://raw.githubusercontent.com/mitchellkrogza/Stop.Google.Analytics.Ghost.Spam.HOWTO/master/output/domains/INACTIVE/list
 https://raw.githubusercontent.com/nickspaargaren/no-google/master/categories/analytics.txt
 https://raw.githubusercontent.com/nickspaargaren/no-google/master/categories/analyticsparsed
 https://raw.githubusercontent.com/r-a-y/mobile-hosts/master/AdguardMobileSpyware.txt
@@ -33,8 +31,6 @@ https://raw.githubusercontent.com/deathbybandaid/piholeparser/master/Subscribabl
 https://raw.githubusercontent.com/deathbybandaid/piholeparser/master/Subscribable-Lists/ParsedBlacklists/TorrentLocker-Ransomware-Payment-Sites-Domain-Blocklist.txt
 https://gitlab.com/Kurobeats/phishing_hosts/raw/master/hosts
 https://raw.githubusercontent.com/MetaMask/eth-phishing-detect/master/src/hosts.txt
-https://zerodot1.gitlab.io/CoinBlockerLists/list.txt
-https://zerodot1.gitlab.io/CoinBlockerLists/list_browser.txt
 https://pgl.yoyo.org/adservers/serverlist.php?hostformat=hosts&showintro=0&mimetype=plaintext
 https://malware-filter.gitlab.io/malware-filter/phishing-filter-hosts.txt
 https://raw.githubusercontent.com/Te-k/stalkerware-indicators/master/generated/hosts
